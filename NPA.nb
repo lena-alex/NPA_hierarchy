@@ -1,0 +1,3323 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[    131920,       3315]
+NotebookOptionsPosition[    123655,       3123]
+NotebookOutlinePosition[    124939,       3165]
+CellTagsIndexPosition[    124896,       3162]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["t", "Text",
+ CellChangeTimes->{
+  3.7010144560093737`*^9},ExpressionUUID->"247b75da-4d14-4422-94f6-\
+d48b12d95c36"],
+
+Cell[CellGroupData[{
+
+Cell["", "Text",
+ Editable->False,
+ Deletable->False,
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ CellChangeTimes->{{3.663479359046728*^9, 3.663479360193671*^9}, 
+   3.666042316976198*^9, 3.666042972241192*^9},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"cea7a17d-e289-4211-aa31-2a121fe53b24"],
+
+Cell["", "BookChapterNumber",
+ Editable->False,
+ Deletable->False,
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ CellChangeTimes->{{3.6634784694519367`*^9, 3.663478471207335*^9}, 
+   3.663479456713896*^9, {3.663573712662382*^9, 3.663573713469551*^9}, {
+   3.666042961262726*^9, 3.666042972241267*^9}},
+ FontFamily->"Century Schoolbook",
+ FontSize->12,
+ FontWeight->"Plain",ExpressionUUID->"813f01f8-2716-45fe-b229-55ae26d75d7f"],
+
+Cell[TextData[StyleBox["A code for faster generation of constraint matrices \
+in the NPA hierarchy",
+ FontSize->36,
+ FontWeight->"Bold"]], "BookChapterTitle",
+ Deletable->False,
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ CellChangeTimes->{{3.5938515032366343`*^9, 3.5938515228022137`*^9}, {
+  3.663478483957193*^9, 3.663478489838863*^9}, {3.6634794394812403`*^9, 
+  3.663479475949171*^9}, {3.663573694950926*^9, 3.663573697701282*^9}, {
+  3.663574003602249*^9, 3.663574005396147*^9}, {3.665923019001628*^9, 
+  3.665923019658532*^9}, {3.665942142276664*^9, 3.665942142562153*^9}, {
+  3.666005755524229*^9, 3.666005755611291*^9}, {3.666042961262795*^9, 
+  3.666042972241329*^9}, {3.667118145323083*^9, 3.66711814636869*^9}},
+ FontFamily->"Century Schoolbook",
+ FontSize->12,
+ FontWeight->"Plain",ExpressionUUID->"83c4517c-3b9a-4f20-8a57-681d525446ed"],
+
+Cell[TextData[StyleBox["by",
+ FontWeight->"Bold"]], "Text",
+ Editable->False,
+ Deletable->False,
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ CellChangeTimes->{{3.666042346550632*^9, 3.666042346596943*^9}, {
+  3.6660428810144367`*^9, 3.666042894031703*^9}, {3.666042944739255*^9, 
+  3.666042950513783*^9}},ExpressionUUID->"786f7d52-e6f6-4332-afe1-\
+27a8466435b0"],
+
+Cell[TextData[{
+ "\n",
+ StyleBox["Yelena Guryanova", "BookChapterNumber",
+  FontFamily->"Century Schoolbook",
+  FontSize->18],
+ "\n",
+ StyleBox["", "Subsubsection"],
+ "\n",
+ StyleBox["H. H. Wills Physics Laboratory, University of Bristol, Tyndall \
+Avenue, Bristol, BS8 1TL, United Kingdom", "Subsubsection"],
+ "\n",
+ StyleBox["", "Subsubsection"],
+ "\n",
+ StyleBox["yelena.guryanova@gmail.com", "Subsubsection"]
+}], "Text",
+ Editable->False,
+ Deletable->False,
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ CellChangeTimes->{{3.666042346550632*^9, 3.666042346596943*^9}, {
+  3.6660428810144367`*^9, 3.666042894031703*^9}, {3.666042944739255*^9, 
+  3.666042950511518*^9}},ExpressionUUID->"08fd3fec-79da-4079-b3c0-\
+828cc55ca725"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Introduction",
+ FontSize->24]], "Section",
+ CellChangeTimes->{{3.663478852467031*^9, 3.663478854783263*^9}, 
+   3.663479456715706*^9, {3.663479586043763*^9, 3.663479588977499*^9}},
+ LineIndent->1.,
+ LineIndentMaxFraction->0.5,
+ FontFamily->"Century Schoolbook",
+ FontSize->12,
+ FontWeight->"Plain",ExpressionUUID->"92d61517-4570-45f5-9249-6dfe3d72fda4"],
+
+Cell[TextData[{
+ StyleBox["This code is primarily intended for users who wish to run \
+semi-definite programs (SDPs) in order to test properties of the Navasc\
+\[UAcute]es Pironio-Ac",
+  FontSize->14],
+ "\[IAcute]",
+ StyleBox["n (NPA) hierarachy [1, 2].  This work has found numerous \
+applications in quantum information and specifically in non-locality.",
+  FontSize->14],
+ "\n",
+ StyleBox["The program outputs a constraint matrix, displayed to the user and \
+exported to the default location on their computer as .mat file, which can be \
+called in MatLab and implemented as the constraints of an SDP. A vector of \
+unique elements is also output, so that the user may check that the code has \
+executed correctly. The dimensions of the output matrix and how to extract \
+the necessary parts from it are simple, and explained below.",
+  FontSize->14],
+ "\n",
+ StyleBox["In this notebook, we shall not go through the mathematical theory \
+behind the code; for a brief description of the construction of the NPA \
+hierarchy  and an example of how to implement the constraints in ",
+  FontSize->14],
+ StyleBox["MatLab ",
+  FontSize->14,
+  FontSlant->"Italic"],
+ StyleBox["see the accompanying article [REFS]. For the thorough and detailed \
+explanation of the theory, see the orignal work.",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{{3.663487479470765*^9, 3.66348761873368*^9}, {
+   3.663487655698577*^9, 3.663487714831538*^9}, {3.6635739209050426`*^9, 
+   3.663573922567193*^9}, {3.663612568517214*^9, 3.6636125833395033`*^9}, 
+   3.66604304805645*^9, 3.666044286011958*^9, {3.6660451787091637`*^9, 
+   3.666045203689762*^9}, {3.666046696496038*^9, 3.666046700695363*^9}, {
+   3.666049788241868*^9, 3.666049818095153*^9}, {3.6671136393795347`*^9, 
+   3.6671136769174128`*^9}, {3.667113733459353*^9, 3.66711378730634*^9}, {
+   3.6671141239590483`*^9, 3.667114150232389*^9}, {3.667117782271369*^9, 
+   3.66711778800996*^9}},
+ LineIndent->1.,
+ LineIndentMaxFraction->0.5,
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"a926f0f5-19ac-494a-a483-e7cb9c4c6640"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Using the code",
+ FontSize->24]], "Section",
+ Editable->True,
+ Evaluatable->False,
+ CellChangeTimes->{{3.663478852467031*^9, 3.663478854783263*^9}, 
+   3.663479456715706*^9, {3.663479586043763*^9, 3.663479588977499*^9}, {
+   3.6660449755200644`*^9, 3.6660449779911203`*^9}},
+ FontFamily->"Century Schoolbook",
+ FontSize->12,
+ FontWeight->"Plain",ExpressionUUID->"d317574f-01db-4e67-a267-abc1e732706c"],
+
+Cell[TextData[{
+ StyleBox["Using the function is easy: simply evaluate it in the \
+\[OpenCurlyQuote]code\[CloseCurlyQuote] section below. Once evaluated it may \
+be used by entering the parameters of the non-locality scenario as arguments. \
+The function takes four arguments: the level ",
+  FontSize->14],
+ StyleBox["l ",
+  FontSize->14,
+  FontSlant->"Italic"],
+ StyleBox[" and the number of parties ",
+  FontSize->14],
+ StyleBox["n",
+  FontSize->14,
+  FontSlant->"Italic"],
+ StyleBox[" are integers; the inputs for each party ",
+  FontSize->14],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["x", 
+      StyleBox[
+       RowBox[{" ", "1"}],
+       FontSize->10]], ",", " ", "\[CenterEllipsis]", " ", ",", " ", 
+     SubscriptBox[
+      RowBox[{"x", " "}], 
+      StyleBox["n",
+       FontSize->10]]}]}], TraditionalForm]],ExpressionUUID->
+  "edc64005-f4c9-4463-b7e9-eb390d6d73f6"],
+ StyleBox[") and the outputs for each party ",
+  FontSize->14],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["a", 
+      StyleBox[
+       RowBox[{" ", "1"}],
+       FontSize->10]], ",", " ", "\[CenterEllipsis]", " ", ",", " ", 
+     SubscriptBox["a", 
+      StyleBox["n",
+       FontSize->10]]}]}], TraditionalForm]],ExpressionUUID->
+  "6f5e79d1-63d2-4637-bb4a-0084b7826552"],
+ StyleBox[") must be input as ",
+  FontSize->14],
+ StyleBox["Mathematica",
+  FontSize->14,
+  FontSlant->"Italic"],
+ StyleBox[" vectors using curly braces. The number of elements in each vector \
+must match the number of parties. An example of a correct call for a scenario \
+using level 4 of the hierarchy, 3 parties, each with two inputs and two \
+outputs is:",
+  FontSize->14]
+}], "Text",
+ Editable->True,
+ Deletable->False,
+ Evaluatable->False,
+ CellChangeTimes->{{3.663487479470765*^9, 3.66348761873368*^9}, {
+   3.663487655698577*^9, 3.663487795823987*^9}, {3.6634880080508137`*^9, 
+   3.663488016595921*^9}, {3.663572119516667*^9, 3.663572153219059*^9}, {
+   3.663584265097992*^9, 3.663584290815319*^9}, {3.6635846098470583`*^9, 
+   3.663584699573783*^9}, {3.6636125744000883`*^9, 3.6636125782534323`*^9}, 
+   3.665939129666149*^9, {3.6659463636415997`*^9, 3.6659463648632507`*^9}, {
+   3.666042251335266*^9, 3.6660422826932917`*^9}, {3.666044244044179*^9, 
+   3.666044275100711*^9}, {3.66604441264957*^9, 3.666044418280191*^9}, {
+   3.666044458166958*^9, 3.6660445821482553`*^9}, {3.666044627112677*^9, 
+   3.666044629862464*^9}, 3.66604485074846*^9, {3.6660448838749657`*^9, 
+   3.6660450108541613`*^9}, {3.6660450735287724`*^9, 3.666045104414591*^9}, {
+   3.666046795365842*^9, 3.6660468045177317`*^9}, {3.66604773315561*^9, 
+   3.666047749135371*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"9af1547e-8316-4bbd-a375-3acfbaf949f5"],
+
+Cell[BoxData[{
+ RowBox[{"NPAmat", "[", 
+  RowBox[{"level", ",", 
+   StyleBox["parties",
+    FontColor->RGBColor[0., 0., 0.]], 
+   StyleBox[",",
+    FontColor->RGBColor[0., 0., 0.]], 
+   StyleBox["inputs",
+    FontColor->RGBColor[0., 0., 0.]], 
+   StyleBox[",",
+    FontColor->RGBColor[0., 0., 0.]], 
+   StyleBox["outputs",
+    FontColor->RGBColor[0., 0., 0.]]}], "]"}], "\[LineSeparator]", 
+ RowBox[{"NPAmat", "[", 
+  RowBox[{"4", ",", " ", "3", ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", " ", "2", ",", " ", "2"}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", " ", "2", ",", " ", "2"}], "}"}]}], "]"}]}], "Input",
+ Editable->True,
+ Deletable->False,
+ Evaluatable->False,
+ CellChangeTimes->{{3.666044382535975*^9, 3.666044396923645*^9}, {
+  3.666044441817734*^9, 3.666044454224531*^9}, {3.6660445956652393`*^9, 
+  3.666044605048318*^9}, {3.666054511392371*^9, 3.666054511955804*^9}, {
+  3.6671141576278753`*^9, 3.6671141762577963`*^9}},
+ FontSize->14,ExpressionUUID->"e1a53e4a-813a-41a4-a408-bc2343ebf646"],
+
+Cell[TextData[StyleBox["",
+ Editable->True,
+ FontFamily->"Century Schoolbook",
+ FontSize->14,
+ InterpretationBoxOptions->{Editable->True}]], "Text",
+ Editable->True,
+ Deletable->False,
+ Evaluatable->False,
+ CellChangeTimes->{{3.6660469312677393`*^9, 3.666046946874436*^9}, {
+   3.666054625573257*^9, 3.6660546285399017`*^9}, 
+   3.667114195008299*^9},ExpressionUUID->"0bc02d65-bc27-41f7-853a-\
+d631bb3c7004"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["The code ",
+ FontSize->24]], "Section",
+ CellChangeTimes->{{3.663478852467031*^9, 3.663478854783263*^9}, 
+   3.663479456715706*^9},
+ FontFamily->"Century Schoolbook",
+ FontSize->12,
+ FontWeight->"Plain",ExpressionUUID->"f7ec601e-259f-487f-8c9b-49d41bf7b61a"],
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{
+   RowBox[{
+    RowBox[{"NPAmat", "[", 
+     RowBox[{"level_", ",", "parties_", ",", "inputs_", ",", "outputs_"}], 
+     "]"}], ":=", "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", " ", 
+       RowBox[{
+       "allrules", ",", "Generators", ",", "LTuples", ",", "NumberLTuples", 
+        ",", "joinTuples", ",", " ", "NonGen", ",", " ", "vec", ",", " ", 
+        "vec1", ",", " ", "dimMat", ",", " ", "NPA", ",", "symmetrise", ",", 
+        " ", "choice", ",", " ", "uniqueElements", ",", "numElements", ",", 
+        " ", "mymap", ",", " ", "constraints"}], "}"}], ",", 
+      "\[IndentingNewLine]", "\n", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"ClearAll", "[", "CircleTimes", "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"SetAttributes", "[", 
+         RowBox[{"CircleTimes", ",", 
+          RowBox[{"{", 
+           RowBox[{"Flat", ",", "OneIdentity"}], "}"}]}], "]"}], ";", "\n", 
+        RowBox[{"choice", " ", "=", " ", 
+         RowBox[{"ChoiceDialog", "[", 
+          RowBox[{
+          "\"\<Compute constraints for real or complex-valued variables?\>\"",
+            ",", " ", "\n", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"\"\<Real\>\"", " ", "\[Rule]", 
+              StyleBox[
+               RowBox[{" ", 
+                StyleBox[" ",
+                 FontFamily->"Courier",
+                 FontWeight->"Bold"]}]], "0"}], ",", " ", 
+             RowBox[{"\"\<Complex\>\"", " ", "\[Rule]", 
+              StyleBox[
+               RowBox[{" ", 
+                StyleBox[" ",
+                 FontFamily->"Courier",
+                 FontWeight->"Bold"]}]], "1"}]}], "}"}]}], "]"}]}], ";", " ", 
+        "\[IndentingNewLine]", 
+        RowBox[{"allrules", " ", "=", " ", 
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"0", "\[CircleTimes]", " ", "a1_"}], "\[RuleDelayed]", 
+            "0"}], ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"a1_", "\[CircleTimes]", "0"}], "\[RuleDelayed]", "0"}], 
+           ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             TemplateBox[{SubscriptBox["e", "q1_"],RowBox[{"{", 
+                 RowBox[{"x_", ",", "a_"}], "}"}]},
+              "Superscript"], "\[CircleTimes]", 
+             TemplateBox[{SubscriptBox["e", "q1_"],RowBox[{"{", 
+                 RowBox[{"x_", ",", "a1_"}], "}"}]},
+              "Superscript"]}], "\[RuleDelayed]", 
+            RowBox[{"0", "/;", " ", 
+             RowBox[{"a", " ", "\[NotEqual]", "a1"}]}]}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"a1_", "\[CircleTimes]", "a2_"}], "\[RuleDelayed]", 
+            RowBox[{"a2", "/;", 
+             RowBox[{"a1", "\[Equal]", "\[CapitalIota]"}]}]}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"a1_", "\[CircleTimes]", "a2_"}], "\[RuleDelayed]", 
+            RowBox[{"a1", "/;", 
+             RowBox[{"a2", "\[Equal]", "\[CapitalIota]"}]}]}], ",", " ", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"\[CapitalIota]", "\[CircleTimes]", "\[CapitalIota]"}], 
+            "\[RuleDelayed]", " ", "\[CapitalIota]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             TemplateBox[{SubscriptBox["e", "q1_"],RowBox[{"{", 
+                 RowBox[{"x_", ",", "a_"}], "}"}]},
+              "Superscript"], "\[CircleTimes]", 
+             TemplateBox[{SubscriptBox["e", "p1_"],RowBox[{"{", 
+                 RowBox[{"y_", ",", "b_"}], "}"}]},
+              "Superscript"]}], "\[RuleDelayed]", 
+            RowBox[{
+             RowBox[{"Sort", "[", 
+              RowBox[{
+               TemplateBox[{SubscriptBox["e", "p1"],RowBox[{"{", 
+                   RowBox[{"y", ",", "b"}], "}"}]},
+                "Superscript"], "\[CircleTimes]", 
+               TemplateBox[{SubscriptBox["e", "q1"],RowBox[{"{", 
+                   RowBox[{"x", ",", "a"}], "}"}]},
+                "Superscript"]}], "]"}], "/;", " ", 
+             RowBox[{"q1", ">", "p1"}]}]}], ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{
+             TemplateBox[{SubscriptBox["e", "q1_"],RowBox[{"{", 
+                 RowBox[{"x_", ",", "a_"}], "}"}]},
+              "Superscript"], "\[CircleTimes]", 
+             TemplateBox[{SubscriptBox["e", "q1_"],RowBox[{"{", 
+                 RowBox[{"x_", ",", "a_"}], "}"}]},
+              "Superscript"]}], "\[RuleDelayed]", 
+            TemplateBox[{SubscriptBox["e", "q1"],RowBox[{"{", 
+                RowBox[{"x", ",", "a"}], "}"}]},
+             "Superscript"]}]}], "\[IndentingNewLine]", "}"}]}], ";", 
+        "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"Generators", "=", 
+         RowBox[{"Sort", "@", 
+          RowBox[{"Join", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+             "\[CapitalIota]", "\[CircleTimes]", " ", "\[CapitalIota]"}], 
+             "}"}], ",", 
+            RowBox[{"Flatten", "@", 
+             RowBox[{"Table", "[", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"Table", "[", 
+                RowBox[{
+                 RowBox[{"Table", "[", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"\[CapitalIota]", "\[CircleTimes]", 
+                    TemplateBox[{SubscriptBox["e", "i"],RowBox[{"{", 
+                    RowBox[{"j", ",", "k"}], "}"}]},
+                    "Superscript"]}], "}"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{"j", ",", " ", "1", ",", " ", 
+                    RowBox[{"inputs", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}]}], "}"}]}], "]"}], ",", 
+                 RowBox[{"{", 
+                  RowBox[{"k", ",", " ", "1", ",", "  ", 
+                   RowBox[{
+                    RowBox[{"outputs", "[", 
+                    RowBox[{"[", "i", "]"}], "]"}], "-", "1"}]}], "}"}]}], 
+                "]"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"i", ",", " ", "1", ",", " ", "parties"}], "}"}]}], 
+              "]"}]}]}], "]"}]}]}], " ", ";", "\[IndentingNewLine]", "\n", 
+        RowBox[{"LTuples", "=", 
+         RowBox[{"Tuples", "[", 
+          RowBox[{"Generators", ",", 
+           RowBox[{"{", "level", "}"}]}], "]"}]}], ";", 
+        RowBox[{"NumberLTuples", "=", 
+         RowBox[{"Length", "[", "LTuples", "]"}]}], ";", 
+        "\[IndentingNewLine]", "\n", 
+        RowBox[{"joinTuples", "=", 
+         RowBox[{
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"Apply", "[", 
+             RowBox[{"CircleTimes", ",", " ", 
+              RowBox[{"LTuples", "[", 
+               RowBox[{"[", 
+                RowBox[{"i", ",", " ", "All"}], "]"}], "]"}]}], "]"}], ",", 
+            " ", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", " ", "1", ",", " ", "NumberLTuples"}], "}"}]}],
+            "]"}], "//.", "allrules"}]}], ";", " ", "\[IndentingNewLine]", 
+        "\n", 
+        RowBox[{"NonGen", "=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Sort", "[", 
+            RowBox[{"#1", "[", 
+             RowBox[{"[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"Length", "[", "Generators", "]"}], "+", "1"}], ";;", 
+               
+               RowBox[{"Length", "[", "#1", "]"}]}], "]"}], "]"}], "]"}], 
+           "&"}], "@", 
+          RowBox[{"DeleteDuplicates", "@", 
+           RowBox[{"Flatten", "@", 
+            RowBox[{"Gather", "[", "joinTuples", "]"}]}]}]}]}], ";", "\n", 
+        "\n", 
+        RowBox[{"vec", "=", " ", 
+         RowBox[{"Join", "[", 
+          RowBox[{"Generators", ",", 
+           RowBox[{"DeleteCases", "[", 
+            RowBox[{"NonGen", ",", "0"}], "]"}]}], "]"}]}], ";", "\n", 
+        RowBox[{"vec1", " ", "=", " ", 
+         RowBox[{"Reverse", "/@", " ", "vec"}]}], ";", "\n", 
+        RowBox[{"dimMat", " ", "=", " ", 
+         RowBox[{"Length", "[", "vec", "]"}]}], ";", "\[IndentingNewLine]", 
+        "\n", 
+        RowBox[{"NPA", "=", 
+         RowBox[{
+          RowBox[{"Outer", "[", 
+           RowBox[{"CircleTimes", ",", "vec1", ",", "vec"}], "]"}], "//.", 
+          "allrules"}]}], " ", ";", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"symmetrise", "[", "UpperTriMat_", "]"}], ":=", 
+         RowBox[{"UpperTriMat", "+", 
+          RowBox[{"Transpose", "[", "UpperTriMat", "]"}], "-", 
+          RowBox[{"DiagonalMatrix", "[", 
+           RowBox[{"Flatten", "[", 
+            RowBox[{"MapIndexed", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"#1", "[", 
+                RowBox[{"[", "#2", "]"}], "]"}], "&"}], ",", "UpperTriMat"}], 
+             "]"}], "]"}], "]"}]}]}], ";", "\n", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"SameQ", "[", 
+           RowBox[{"choice", ",", " ", "0"}], "]"}], ",", " ", 
+          RowBox[{"NPA", " ", "=", 
+           RowBox[{"symmetrise", "[", 
+            RowBox[{"UpperTriangularize", "[", "NPA", "]"}], "]"}]}], ",", 
+          " ", "NPA"}], "]"}], ";", " ", "\n", "\n", 
+        RowBox[{"uniqueElements", "=", 
+         RowBox[{"DeleteDuplicates", "@", 
+          RowBox[{"Flatten", "@", 
+           RowBox[{"Gather", "[", "NPA", "]"}]}]}]}], ";", "\n", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"MemberQ", "[", 
+           RowBox[{"uniqueElements", ",", "0"}], "]"}], ",", 
+          RowBox[{"uniqueElements", " ", "=", " ", 
+           RowBox[{"Prepend", "[", 
+            RowBox[{
+             RowBox[{"DeleteCases", "[", 
+              RowBox[{"uniqueElements", ",", " ", "0"}], "]"}], ",", "0"}], 
+            "]"}]}], ",", " ", "uniqueElements"}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"numElements", " ", "=", " ", 
+         RowBox[{"Length", "[", "uniqueElements", "]"}]}], ";", "\n", 
+        RowBox[{
+         RowBox[{"mymap", "[", "x_", "]"}], ":=", 
+         RowBox[{"Boole", "@", 
+          RowBox[{"Map", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"SameQ", "[", 
+              RowBox[{"#", ",", 
+               RowBox[{
+               "uniqueElements", "\[LeftDoubleBracket]", "x", 
+                "\[RightDoubleBracket]"}]}], "]"}], "&"}], ",", "NPA", ",", 
+            RowBox[{"{", "2", "}"}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+        "\n", 
+        RowBox[{"constraints", " ", "=", " ", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"SameQ", "[", 
+            RowBox[{
+             RowBox[{"uniqueElements", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], ",", "0"}], "]"}], ",", " ", 
+           RowBox[{"Sum", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{"i", "-", "1"}], ")"}], "*", 
+              RowBox[{"mymap", "[", "i", "]"}]}], ",", " ", 
+             RowBox[{"{", 
+              RowBox[{"i", ",", " ", "1", ",", " ", "numElements"}], "}"}]}], 
+            "]"}], ",", " ", 
+           RowBox[{"Sum", "[", 
+            RowBox[{
+             RowBox[{"i", "*", 
+              RowBox[{"mymap", "[", "i", "]"}]}], ",", " ", 
+             RowBox[{"{", 
+              RowBox[{"i", ",", " ", "1", ",", " ", "numElements"}], "}"}]}], 
+            "]"}]}], "]"}]}], ";"}], ";", "\n", 
+       RowBox[{"Print", "[", 
+        RowBox[{
+         RowBox[{"uniqueElements", "//", "MatrixForm"}], ",", " ", 
+         RowBox[{"constraints", "//", "MatrixForm"}]}], "]"}], ";", " ", "\n", 
+       RowBox[{"Return", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Export", "[", 
+           RowBox[{
+            RowBox[{"\"\<NPAmat_lnmd_\>\"", "<>", 
+             RowBox[{"ToString", "[", "level", "]"}], "<>", 
+             RowBox[{"ToString", "[", "parties", "]"}], "<>", "\"\<_\>\"", "<>", 
+             RowBox[{"ToString", "[", 
+              RowBox[{"FromDigits", "[", "inputs", "]"}], "]"}], "<>", 
+             "\"\<_\>\"", "<>", 
+             RowBox[{"ToString", "[", 
+              RowBox[{"FromDigits", "[", "outputs", "]"}], "]"}], "<>", 
+             "\"\<.mat\>\""}], ",", " ", "constraints"}], "]"}], ",", 
+          "uniqueElements", ",", "constraints"}], "}"}], "]"}]}]}], 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", "]"}]}], "\n", "\n"}],
+  FontFamily->"Courier",
+  FontWeight->"Bold"]], "Code",
+ PageWidth->PaperWidth,
+ CellChangeTimes->{{3.663478537241681*^9, 3.663478576436947*^9}, {
+   3.663478610832448*^9, 3.66347861584168*^9}, {3.66347872882206*^9, 
+   3.663478737338113*^9}, {3.663478781834587*^9, 3.6634787826198177`*^9}, 
+   3.6634794567175617`*^9, {3.6634800927384157`*^9, 3.663480094753439*^9}, {
+   3.6635002534957314`*^9, 3.663500253861907*^9}, {3.663500299250589*^9, 
+   3.663500338309115*^9}, 3.6635067707847357`*^9, {3.6635068270911913`*^9, 
+   3.663506865479384*^9}, {3.663508799145256*^9, 3.663508801821849*^9}, 
+   3.663509764249518*^9, {3.665934860640327*^9, 3.665934864577312*^9}, {
+   3.665935289475315*^9, 3.665935291576683*^9}, {3.665935364834549*^9, 
+   3.665935397802319*^9}, {3.665935499435543*^9, 3.665935500393811*^9}, {
+   3.665935775035779*^9, 3.665935792778841*^9}, 3.6659358407566032`*^9, {
+   3.665936049258341*^9, 3.665936075816605*^9}, {3.665936636155209*^9, 
+   3.665936637937969*^9}, {3.6659367959997063`*^9, 3.665936817412032*^9}, {
+   3.665937139597939*^9, 3.665937140354694*^9}, {3.665938302515841*^9, 
+   3.6659383064124517`*^9}, 3.6659383599076357`*^9, {3.665938392092308*^9, 
+   3.665938394010397*^9}, 3.665938480129912*^9, {3.6659385158461657`*^9, 
+   3.6659385546505203`*^9}, {3.665938789114994*^9, 3.665938800055393*^9}, {
+   3.665939042454126*^9, 3.665939044323874*^9}, {3.6659411590974483`*^9, 
+   3.6659411729521227`*^9}, {3.665941240528853*^9, 3.665941253439889*^9}, {
+   3.665941290953149*^9, 3.665941306982504*^9}, {3.665941387760816*^9, 
+   3.665941411584402*^9}, {3.665941508147417*^9, 3.665941542910956*^9}, {
+   3.665941573182858*^9, 3.665941582836143*^9}, {3.665941655493137*^9, 
+   3.665941703035726*^9}, {3.665943142198656*^9, 3.665943144142271*^9}, {
+   3.6659431898131866`*^9, 3.665943204514654*^9}, {3.666002864634347*^9, 
+   3.666002927452532*^9}, {3.66600299508747*^9, 3.666003026131303*^9}, {
+   3.6660145288400497`*^9, 3.666014528973927*^9}, {3.666014620059594*^9, 
+   3.666014654209738*^9}, {3.666014840285763*^9, 3.666014851266608*^9}, {
+   3.666015523885817*^9, 3.666015535475909*^9}, {3.66601563122442*^9, 
+   3.6660156395887003`*^9}, {3.666024703396644*^9, 3.6660247141186733`*^9}, {
+   3.666043158551765*^9, 3.66604318387007*^9}, {3.666084899151308*^9, 
+   3.666084926925425*^9}, {3.6660849634428997`*^9, 3.666084964833959*^9}, {
+   3.666085079792852*^9, 3.666085096860771*^9}, {3.667112339347732*^9, 
+   3.667112341049748*^9}, {3.667136832433166*^9, 3.667136838011813*^9}, {
+   3.6671386412035923`*^9, 3.667138687863061*^9}, {3.6671388972815857`*^9, 
+   3.667138899864874*^9}, {3.6671962949412537`*^9, 3.66719629869516*^9}, {
+   3.667196446434164*^9, 3.667196447175568*^9}, 3.6671977112552433`*^9, {
+   3.667202816805304*^9, 3.6672028628919287`*^9}, {3.667202951215064*^9, 
+   3.667202973730096*^9}, {3.667295716444084*^9, 3.667295725939807*^9}, {
+   3.667806874942732*^9, 3.667806875046269*^9}, {3.6678069639964333`*^9, 
+   3.667806970796836*^9}, {3.667807001595355*^9, 3.667807043163992*^9}, {
+   3.667807076886429*^9, 3.667807110487617*^9}, {3.667807185068033*^9, 
+   3.667807185592608*^9}, {3.667807412922274*^9, 3.667807420767075*^9}, {
+   3.667807509422735*^9, 3.667807531315291*^9}, {3.678362094528035*^9, 
+   3.678362098729261*^9}, 3.678363735327896*^9, 3.7327487447775393`*^9, 
+   3.732749824805814*^9},
+ FontFamily->"Century Schoolbook",
+ FontWeight->"Plain",ExpressionUUID->"e6c0740d-3f38-49ec-8f5d-d79ed574f6dd"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["How does it work?",
+ FontSize->24]], "Section",
+ CellChangeTimes->{{3.663478852467031*^9, 3.663478854783263*^9}, 
+   3.663479456715706*^9, {3.663480237843244*^9, 3.66348025163411*^9}},
+ FontFamily->"Century Schoolbook",
+ FontSize->12,
+ FontWeight->"Plain",ExpressionUUID->"90f4a509-5bef-4e12-8791-d593f70ea1a7"],
+
+Cell[TextData[StyleBox["In order to understand how the code works, we will \
+refer to a concrete example, namely that of the level 2, 2 parties, 2 inputs, \
+2 outputs scenario, which we will refer to as 2-(2222). ",
+ FontSize->14]], "Text",
+ CellChangeTimes->{{3.663502385381031*^9, 3.6635024292994633`*^9}, {
+  3.6635721920288486`*^9, 3.6635721957793093`*^9}, {3.665925370562393*^9, 
+  3.665925371466053*^9}, {3.6659264335130672`*^9, 3.6659264415328627`*^9}, {
+  3.666047854948*^9, 3.666047908265849*^9}, {3.666047949593625*^9, 
+  3.666047953937697*^9}, {3.6671180054874353`*^9, 3.667118013812023*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"9089ca51-7797-4f43-902d-71c7116bc195"],
+
+Cell[TextData[{
+ StyleBox["The code starts by defining global rules, ",
+  FontSize->14],
+ StyleBox["allrules", "Input",
+  FontSize->14],
+ StyleBox[", which define the behaviour of the projectors. The first rules \
+define the zero element, orthogonality and the identity element.",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{
+  3.663479456732334*^9, {3.663480396558731*^9, 3.6634804771562853`*^9}, {
+   3.663489393597904*^9, 3.663489401250978*^9}, 3.6635722589171543`*^9, {
+   3.6636126618567677`*^9, 3.663612750668961*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"d5df0146-f745-466a-a989-84579659bf12"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ FormBox[
+  StyleBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox[
+      SubscriptBox["E", "k"], 
+      RowBox[{
+       SubscriptBox["x", "k"], ",", 
+       SubscriptBox["a", "k"]}]], "\[CircleTimes]", " ", "0"}], " ", "=", " ", 
+    RowBox[{
+     RowBox[{"0", " ", "\[CircleTimes]", 
+      SuperscriptBox[
+       SubscriptBox["E", "k"], 
+       RowBox[{
+        SubscriptBox["x", "k"], ",", 
+        SubscriptBox["a", "k"]}]]}], " ", "=", " ", 
+     RowBox[{"0", "        ", 
+      RowBox[{"\[ForAll]", 
+       SuperscriptBox[
+        SubscriptBox["E", "k"], 
+        RowBox[{
+         SubscriptBox["x", "k"], ",", 
+         SubscriptBox["a", "k"]}]]}]}]}]}],
+   FontSize->16], TraditionalForm]], "ExerciseEquationNumbered",
+ CellChangeTimes->{
+  3.6634794567834*^9, {3.6635745867190027`*^9, 3.663574660467008*^9}, {
+   3.663576667899584*^9, 3.663576675509399*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"22563109-41c6-4746-ac4b-df2f18caa825"],
+
+Cell[BoxData[
+ FormBox[
+  StyleBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox[
+      SubscriptBox["E", "k"], 
+      RowBox[{
+       SubscriptBox["x", "k"], ",", 
+       SubscriptBox["a", "k"]}]], "\[CircleTimes]", " ", 
+     SuperscriptBox[
+      SubscriptBox["E", "k"], 
+      RowBox[{
+       SubscriptBox["x", "k"], ",", 
+       SubscriptBox[
+        SuperscriptBox["a", "\[Prime]"], "k"]}]]}], " ", "=", " ", 
+    RowBox[{"0", "       ", 
+     RowBox[{"\[ForAll]", " ", 
+      RowBox[{"a", "\[NotEqual]", 
+       SuperscriptBox["a", "\[Prime]"]}]}]}]}],
+   FontSize->16], TraditionalForm]], "ExerciseEquationNumbered",
+ CellChangeTimes->{
+  3.6634794567834*^9, {3.6635745867190027`*^9, 3.6635746852357063`*^9}, {
+   3.663576610455654*^9, 3.663576632268012*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"b26f2230-c7a4-4bd5-b552-4e30d0679390"],
+
+Cell[BoxData[
+ FormBox[
+  StyleBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox[
+      SubscriptBox["E", "k"], 
+      RowBox[{
+       SubscriptBox["x", "k"], ",", 
+       SubscriptBox["a", "k"]}]], "\[CircleTimes]", " ", "I"}], " ", "=", " ", 
+    RowBox[{"I", " ", "\[CircleTimes]", " ", 
+     RowBox[{
+      SuperscriptBox[
+       SubscriptBox["E", "k"], 
+       RowBox[{
+        SubscriptBox["x", "k"], ",", 
+        SubscriptBox["a", "k"]}]], " ", "=", " ", 
+      SuperscriptBox[
+       SubscriptBox["E", "k"], 
+       RowBox[{
+        SubscriptBox["x", "k"], ",", 
+        SubscriptBox["a", "k"]}]]}]}]}],
+   FontSize->16], TraditionalForm]], "ExerciseEquationNumbered",
+ CellChangeTimes->{
+  3.6634794567834*^9, {3.6635745867190027`*^9, 3.6635747353316927`*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"196a0a2f-04d0-4cde-91a6-fd84680f2542"],
+
+Cell[BoxData[
+ FormBox[
+  StyleBox[
+   RowBox[{
+    RowBox[{"I", "\[CircleTimes]", " ", "I"}], " ", "=", " ", "I"}],
+   FontSize->16], TraditionalForm]], "ExerciseEquationNumbered",
+ CellChangeTimes->{
+  3.6634794567834*^9, {3.6635745867190027`*^9, 3.663574769786661*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"b5433fcb-9b55-4aa6-b433-66c952efc02f"]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["The penultimate line defines a canonical order that ensures that \
+the rule will stop being applied once this order is reached. The order uses \
+the inbuilt Mathematica ",
+  FontSize->14],
+ StyleBox["Sort", "Input",
+  FontSize->14],
+ StyleBox[" ", "Input",
+  FontSize->14,
+  FontWeight->"Plain"],
+ StyleBox["function, which is numeric in the labelling of the parties, inputs \
+and outputs. Finally, the last line defines the basic objects as projetors.",
+  FontSize->14],
+ StyleBox[" ",
+  FontSize->16]
+}], "Text",
+ CellChangeTimes->{{3.6634813182951603`*^9, 3.663481375805793*^9}, {
+   3.663481659169468*^9, 3.663481676720903*^9}, {3.6635016976214437`*^9, 
+   3.663501759916095*^9}, {3.663584352976706*^9, 3.663584385918394*^9}, {
+   3.663584528155354*^9, 3.663584545314577*^9}, 3.665923171378222*^9, {
+   3.6660432204848757`*^9, 3.666043221218625*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"b27aa5da-48f1-436a-9265-966179626960"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ FormBox[
+  RowBox[{
+   RowBox[{
+    StyleBox[
+     RowBox[{
+      SuperscriptBox[
+       SubscriptBox["E", "k"], 
+       RowBox[{
+        SubscriptBox["x", "k"], ",", 
+        SubscriptBox["a", "k"]}]], "\[CircleTimes]", 
+      RowBox[{
+       SuperscriptBox[
+        SubscriptBox["E", 
+         SuperscriptBox["k", "\[Prime]"]], 
+        RowBox[{
+         SubscriptBox[
+          SuperscriptBox["x", "\[Prime]"], 
+          SuperscriptBox["k", "\[Prime]"]], ",", 
+         SubscriptBox[
+          SuperscriptBox["a", "\[Prime]"], 
+          SuperscriptBox["k", "\[Prime]"]]}]], "\[LongRightArrow]", 
+       SuperscriptBox[
+        SubscriptBox["E", 
+         SuperscriptBox["k", "\[Prime]"]], 
+        RowBox[{
+         SubscriptBox[
+          SuperscriptBox["x", "\[Prime]"], 
+          SuperscriptBox["k", "\[Prime]"]], ",", 
+         SubscriptBox[
+          SuperscriptBox["a", "\[Prime]"], 
+          SuperscriptBox["k", "\[Prime]"]]}]]}], "\[CircleTimes]", 
+      SuperscriptBox[
+       SubscriptBox["E", "k"], 
+       RowBox[{
+        SubscriptBox["x", "k"], ",", 
+        SubscriptBox["a", "k"]}]]}],
+     FontSize->16], 
+    StyleBox["                         ",
+     FontSize->16], 
+    StyleBox["if",
+     FontSize->16], 
+    StyleBox[" ",
+     FontSize->16], 
+    SuperscriptBox[
+     StyleBox["k",
+      FontSize->16], "\[Prime]"]}], 
+   StyleBox["<",
+    FontSize->16], 
+   StyleBox[" ",
+    FontSize->16], 
+   StyleBox["k",
+    FontSize->16]}], TraditionalForm]], "ExerciseEquationNumbered",
+ CellChangeTimes->{
+  3.6634794567834*^9, {3.6635745867190027`*^9, 3.6635747353316927`*^9}, {
+   3.663576800656639*^9, 3.663576927019453*^9}, 3.663577081271845*^9},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"bee6c74a-c6e1-45b5-894b-a8710ef05e7d"],
+
+Cell[BoxData[
+ FormBox[
+  StyleBox[
+   RowBox[{
+    RowBox[{
+     StyleBox[
+      SuperscriptBox[
+       SubscriptBox["E", "k"], 
+       RowBox[{
+        SubscriptBox["x", "k"], ",", 
+        SubscriptBox["a", "k"]}]],
+      FontSlant->"Italic"], "\[CircleTimes]", 
+     StyleBox[
+      SuperscriptBox[
+       SubscriptBox["E", "k"], 
+       RowBox[{
+        SubscriptBox["x", "k"], ",", 
+        SubscriptBox["a", "k"]}]],
+      FontSlant->"Italic"]}], 
+    StyleBox[" ",
+     FontSlant->"Italic"], 
+    StyleBox["=",
+     FontSlant->"Italic"], 
+    StyleBox[" ",
+     FontSlant->"Italic"], 
+    StyleBox[
+     SuperscriptBox[
+      SubscriptBox["E", "k"], 
+      RowBox[{
+       SubscriptBox["x", "k"], ",", 
+       SubscriptBox["a", "k"]}]],
+     FontSlant->"Italic"]}],
+   FontSize->16], TraditionalForm]], "ExerciseEquationNumbered",
+ CellChangeTimes->{
+  3.6634794567834*^9, {3.6635745867190027`*^9, 3.6635747353316927`*^9}, {
+   3.663576800656639*^9, 3.663576927019453*^9}, {3.663577081271845*^9, 
+   3.6635770936029043`*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"4010ea6c-6335-4e98-94c5-73c37a728213"]
+}, Open  ]],
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{
+   RowBox[{"allrules", " ", "=", " ", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"0", "\[CircleTimes]", " ", "a1_"}], "\[RuleDelayed]", "0"}], 
+      ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"a1_", "\[CircleTimes]", "0"}], "\[RuleDelayed]", "0"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        TemplateBox[{SubscriptBox["e", "q1_"],RowBox[{"{", 
+            RowBox[{"x_", ",", "a_"}], "}"}]},
+         "Superscript"], "\[CircleTimes]", 
+        TemplateBox[{SubscriptBox["e", "q1_"],RowBox[{"{", 
+            RowBox[{"x_", ",", "a1_"}], "}"}]},
+         "Superscript"]}], "\[RuleDelayed]", 
+       RowBox[{"0", "/;", " ", 
+        RowBox[{"a", " ", "\[NotEqual]", "a1"}]}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"a1_", "\[CircleTimes]", "a2_"}], "\[RuleDelayed]", 
+       RowBox[{"a2", "/;", 
+        RowBox[{"a1", "\[Equal]", "\[CapitalIota]"}]}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"a1_", "\[CircleTimes]", "a2_"}], "\[RuleDelayed]", 
+       RowBox[{"a1", "/;", 
+        RowBox[{"a2", "\[Equal]", "\[CapitalIota]"}]}]}], ",", " ", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"\[CapitalIota]", "\[CircleTimes]", "\[CapitalIota]"}], 
+       "\[RuleDelayed]", " ", "\[CapitalIota]"}], ",", "\[IndentingNewLine]", 
+      
+      RowBox[{
+       RowBox[{
+        TemplateBox[{SubscriptBox["e", "q1_"],RowBox[{"{", 
+            RowBox[{"x_", ",", "a_"}], "}"}]},
+         "Superscript"], "\[CircleTimes]", 
+        TemplateBox[{SubscriptBox["e", "p1_"],RowBox[{"{", 
+            RowBox[{"y_", ",", "b_"}], "}"}]},
+         "Superscript"]}], "\[RuleDelayed]", 
+       RowBox[{
+        RowBox[{"Sort", "[", 
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "p1"],RowBox[{"{", 
+              RowBox[{"y", ",", "b"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "q1"],RowBox[{"{", 
+              RowBox[{"x", ",", "a"}], "}"}]},
+           "Superscript"]}], "]"}], "/;", " ", 
+        RowBox[{"q1", ">", "p1"}]}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        TemplateBox[{SubscriptBox["e", "q1_"],RowBox[{"{", 
+            RowBox[{"x_", ",", "a_"}], "}"}]},
+         "Superscript"], "\[CircleTimes]", 
+        TemplateBox[{SubscriptBox["e", "q1_"],RowBox[{"{", 
+            RowBox[{"x_", ",", "a_"}], "}"}]},
+         "Superscript"]}], "\[RuleDelayed]", 
+       TemplateBox[{SubscriptBox["e", "q1"],RowBox[{"{", 
+           RowBox[{"x", ",", "a"}], "}"}]},
+        "Superscript"]}]}], "\[IndentingNewLine]", "}"}]}], ";"}], 
+  "Input"]], "Text",
+ CellChangeTimes->{
+  3.663480393700946*^9, 3.663612957562977*^9, {3.665925634680902*^9, 
+   3.665925639459675*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"cddfcb3d-cb30-4152-8366-c3ae174d60fb"],
+
+Cell[TextData[{
+ StyleBox["Next, the code establishes the generators (",
+  FontSize->14],
+ StyleBox["Generators", "Input",
+  FontSize->14],
+ StyleBox[") of the NPA matrix. This is the set of local projectors for each \
+of the party\[CloseCurlyQuote]s meausurements together with the identity. The \
+output in our 2-(2222) example scenario would be",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{{3.663501920296605*^9, 3.663501981599372*^9}, {
+   3.6635020456688643`*^9, 3.663502116015294*^9}, {3.663502152292322*^9, 
+   3.663502165770772*^9}, {3.6635022567928343`*^9, 3.6635022873272657`*^9}, {
+   3.663502335892874*^9, 3.663502380356173*^9}, {3.663502437726058*^9, 
+   3.663502473386854*^9}, {3.6635722680637093`*^9, 3.663572295229375*^9}, {
+   3.663584582329774*^9, 3.663584585920374*^9}, {3.665923197808226*^9, 
+   3.665923199368017*^9}, {3.665925533604574*^9, 3.665925534274094*^9}, {
+   3.66600546826464*^9, 3.666005469038485*^9}, {3.666043240394021*^9, 
+   3.666043241553607*^9}, 3.6660469969101963`*^9},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"159b2740-c83f-4b90-989b-5f8d81ec165c"],
+
+Cell[TextData[{
+ Cell[BoxData[
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"\[CapitalIota]", "\[CircleTimes]", "\[CapitalIota]"}], ",", 
+    RowBox[{"\[CapitalIota]", "\[CircleTimes]", 
+     TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+         RowBox[{"1", ",", "1"}], "}"}]},
+      "Superscript"]}], ",", 
+    RowBox[{"\[CapitalIota]", "\[CircleTimes]", 
+     TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+         RowBox[{"2", ",", "1"}], "}"}]},
+      "Superscript"]}], ",", 
+    RowBox[{"\[CapitalIota]", "\[CircleTimes]", 
+     TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+         RowBox[{"1", ",", "1"}], "}"}]},
+      "Superscript"]}], ",", 
+    RowBox[{"\[CapitalIota]", "\[CircleTimes]", 
+     TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+         RowBox[{"2", ",", "1"}], "}"}]},
+      "Superscript"]}]}], "}"}]], "Output",
+  CellChangeTimes->{
+   3.5938681178069077`*^9, 3.593868230764525*^9, 3.5938682625458517`*^9, 
+    3.593868347402684*^9, 3.593869385020356*^9, 3.593869940085305*^9, 
+    3.593869982249958*^9, 3.593881399419154*^9, 3.5938815061956873`*^9, 
+    3.593883008706378*^9, {3.593883060916243*^9, 3.5938830648078613`*^9}, 
+    3.593883234437681*^9, {3.594021569362726*^9, 3.5940216098294353`*^9}, 
+    3.594026492754403*^9, 3.594026810935274*^9, 3.5940269155099688`*^9, 
+    3.594027374096944*^9, 3.594110929113495*^9, 3.594121613406291*^9, 
+    3.594127065332555*^9, 3.5941291012114887`*^9, 3.594208182309051*^9, 
+    3.594209037158793*^9, 3.594209747638927*^9, 3.5943664269287558`*^9, 
+    3.5943678869778852`*^9, 3.59436811830695*^9, 3.594368197682013*^9, 
+    3.5943689153889637`*^9, 3.594369667898353*^9, 3.5943702696558113`*^9, 
+    3.594467062447521*^9, 3.5944678816854153`*^9, {3.594470350468099*^9, 
+    3.59447036327322*^9}, 3.594474034373836*^9, 3.594540588695271*^9, 
+    3.59454092396104*^9, 3.59454103449578*^9, 3.595154939094234*^9, 
+    3.595156731638364*^9, 3.595156781700123*^9, 3.5971470001715508`*^9, 
+    3.598731099234487*^9, 3.598731246746738*^9, 3.598771826092925*^9, {
+    3.598774911675338*^9, 3.5987749354680233`*^9}, 3.608025358152536*^9, 
+    3.608029453735448*^9, {3.608031112253813*^9, 3.6080311220050697`*^9}, 
+    3.608032970530014*^9, {3.608033031897985*^9, 3.608033069569498*^9}, 
+    3.608034590890164*^9, 3.6080353836014223`*^9, 3.608036371975975*^9, 
+    3.60826726993655*^9, {3.6082685243003693`*^9, 3.60826854310889*^9}, 
+    3.608268672921688*^9, 3.60826877365596*^9, 3.608269590483367*^9, 
+    3.608270023881544*^9, 3.608271605624168*^9, {3.608273935583342*^9, 
+    3.608273947854994*^9}, 3.608274183034602*^9, 3.609496446248784*^9, {
+    3.618564262765832*^9, 3.6185642740216627`*^9}, 3.618564377447709*^9, {
+    3.665925243010269*^9, 3.665925272339328*^9}, 3.665925338298402*^9, {
+    3.665925436199067*^9, 3.665925460009664*^9}, 3.66592549736913*^9},
+  ExpressionUUID->"6387fc64-971d-4ab1-92b0-7e1524065be0"],
+ " ,"
+}], "Text",
+ CellChangeTimes->{{3.663501920296605*^9, 3.663501981599372*^9}, {
+   3.6635020456688643`*^9, 3.663502116015294*^9}, {3.663502152292322*^9, 
+   3.663502165770772*^9}, {3.6635022567928343`*^9, 3.6635022873272657`*^9}, {
+   3.663502335892874*^9, 3.6635023476741037`*^9}, 3.663502763054607*^9, 
+   3.665925548938898*^9, {3.666005480318202*^9, 3.6660054817038727`*^9}},
+ FontFamily->"Century Schoolbook",
+ FontSize->14,ExpressionUUID->"989914db-1765-4573-9708-bb93b271bb0b"],
+
+Cell[TextData[StyleBox["where the projectors are defined with the identity \
+element for later convenience. ",
+ FontSize->14]], "Text",
+ CellChangeTimes->{{3.663501920296605*^9, 3.663501984622139*^9}, {
+   3.6635024808119392`*^9, 3.663502481898456*^9}, {3.6635025165793343`*^9, 
+   3.663502599094391*^9}, {3.663502676039585*^9, 3.663502710981201*^9}, {
+   3.66350287928538*^9, 3.663502939610051*^9}, {3.663572302589181*^9, 
+   3.6635723197923403`*^9}, 3.663612511641265*^9, {3.666005475614634*^9, 
+   3.6660054771422157`*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"50e5e366-1c79-4eed-8f81-7025a982002e"],
+
+Cell[TextData[{
+ StyleBox["After the generators are established, the code finds all possible ",
+  FontSize->14],
+ StyleBox["l",
+  FontSize->14,
+  FontSlant->"Italic"],
+ StyleBox["-tuples (",
+  FontSize->14],
+ StyleBox["LTuples", "Input",
+  FontSize->14],
+ StyleBox[") from the set of projectors in the ",
+  FontSize->14],
+ StyleBox["Generators", "Input",
+  FontSize->14],
+ StyleBox[". This establishes all possible sequences compatible with level ",
+  FontSize->14],
+ StyleBox["l", "Equation",
+  FontSize->14,
+  FontSlant->"Italic"],
+ StyleBox[" of the hierarchy. The code composes the projectors via the \
+\[CircleTimes] symbol and applies the rules ",
+  FontSize->14],
+ StyleBox["allrules", "Input",
+  FontSize->14],
+ StyleBox[".", "Input",
+  FontSize->10],
+ StyleBox[" At this stage we have reached the vector expression ",
+  FontSize->14],
+ StyleBox["joinTuples", "Input",
+  FontSize->14],
+ StyleBox[". Following this, the code goes through this vector, deletes the \
+duplicates, sorts them and identifies expressions which did not come from the \
+generating set. The output is the vector ",
+  FontSize->14],
+ StyleBox["NonGen", "Input",
+  FontSize->14],
+ StyleBox[". ",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{{3.66609766822467*^9, 3.666097670751378*^9}, {
+  3.6671138525820627`*^9, 
+  3.6671138614486637`*^9}},ExpressionUUID->"aa1f7209-4ab9-498f-bfff-\
+c0055fd93ff0"],
+
+Cell[TextData[{
+ StyleBox["This vector, is then appended to the vector of generators, such \
+that the result is",
+  FontSize->14],
+ StyleBox[" vec ", "Input",
+  FontSize->14],
+ StyleBox[": the canoncially ordered vector which will construct the NPA \
+matrix. Our example output is:",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{{3.663501920296605*^9, 3.663501984622139*^9}, {
+   3.6635024808119392`*^9, 3.663502481898456*^9}, {3.6635025165793343`*^9, 
+   3.663502599094391*^9}, {3.663502676039585*^9, 3.663502710981201*^9}, {
+   3.66350287928538*^9, 3.663502939610051*^9}, {3.663572302589181*^9, 
+   3.663572336852178*^9}, {3.663572383736532*^9, 3.663572404091996*^9}, {
+   3.6636125172353773`*^9, 3.663612531267069*^9}, {3.6659234268758593`*^9, 
+   3.6659234398846483`*^9}, {3.6659236431204*^9, 3.665923643575555*^9}, {
+   3.665923726252149*^9, 3.665923824651164*^9}, 3.66600549474196*^9, {
+   3.666043277339056*^9, 3.666043277649888*^9}, {3.666097702173565*^9, 
+   3.666097716709374*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"7d4b7ccc-513d-482e-b512-bbe62f00e861"],
+
+Cell[TextData[{
+ "           ",
+ Cell[BoxData[
+  TagBox[
+   RowBox[{"(", "\[NoBreak]", 
+    TagBox[GridBox[{
+       {
+        RowBox[{"\[CapitalIota]", "\[CircleTimes]", "\[CapitalIota]"}]},
+       {
+        RowBox[{"\[CapitalIota]", "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{"\[CapitalIota]", "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{"\[CapitalIota]", "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{"\[CapitalIota]", "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.5599999999999999]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}],
+     Column], "\[NoBreak]", ")"}],
+   Function[BoxForm`e$, 
+    MatrixForm[BoxForm`e$]]]], "Output",
+  CellChangeTimes->{{3.665925475974472*^9, 3.665925508791089*^9}},
+  ExpressionUUID->"009839e0-436b-4795-9a62-a63f542717b9"]
+}], "Text",
+ CellChangeTimes->{{3.663501920296605*^9, 3.663501984622139*^9}, {
+   3.6635024808119392`*^9, 3.663502481898456*^9}, {3.6635025165793343`*^9, 
+   3.663502599094391*^9}, {3.663502676039585*^9, 3.663502710981201*^9}, {
+   3.66350287928538*^9, 3.663502941211725*^9}, 3.6659255369239187`*^9, {
+   3.665925626937788*^9, 3.6659256299135923`*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"41fa8eb2-b684-4c7b-836f-cc491ece2069"],
+
+Cell[TextData[{
+ StyleBox["The NPA matrix is constructed as the inner product of  ",
+  FontSize->14],
+ StyleBox["vec", "Input",
+  FontSize->14],
+ StyleBox[" with itself",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{{3.6635019759516087`*^9, 3.663501979534677*^9}, {
+   3.663502944103942*^9, 3.663502944599024*^9}, {3.6635724090995083`*^9, 
+   3.663572438811123*^9}, {3.665923240287253*^9, 3.665923272454151*^9}, {
+   3.665923358898611*^9, 3.665923383553987*^9}, {3.665923665875225*^9, 
+   3.665923686768416*^9}, {3.6659246158183393`*^9, 3.66592463152184*^9}, {
+   3.665924714581047*^9, 3.665924744834683*^9}, 3.6659248051149054`*^9, {
+   3.665945357152336*^9, 3.665945358741989*^9}, {3.666043396005208*^9, 
+   3.666043397991199*^9}, 3.666045241381694*^9, 3.6660470468075323`*^9, {
+   3.667113921983243*^9, 3.667113922278763*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"9166a484-7b04-4d6c-a80b-08db1292e2b1"],
+
+Cell[BoxData[
+ FormBox[
+  RowBox[{
+   SuperscriptBox[
+    StyleBox[
+     RowBox[{"NPA", " "}],
+     FontSize->16], 
+    StyleBox["l",
+     FontSize->10]], 
+   StyleBox[" ",
+    FontSize->16], 
+   StyleBox["=",
+    FontSize->16], 
+   RowBox[{
+    SuperscriptBox[
+     StyleBox["V",
+      FontSize->16], 
+     RowBox[{
+      StyleBox["l",
+       FontSize->12], " ", 
+      StyleBox["\[Dagger]",
+       FontSize->14]}]], 
+    SuperscriptBox[
+     StyleBox["V",
+      FontSize->16], 
+     RowBox[{" ", 
+      StyleBox["l",
+       FontSize->12]}]], " "}]}], 
+  TraditionalForm]], "ExerciseEquationNumbered",
+ CellChangeTimes->{
+  3.6634794567834*^9, {3.6635745867190027`*^9, 3.6635747353316927`*^9}, {
+   3.663576800656639*^9, 3.663576927019453*^9}, 3.663577081271845*^9, {
+   3.665923285520823*^9, 3.665923348556683*^9}, {3.665924057179413*^9, 
+   3.665924106116168*^9}, {3.665924138009322*^9, 3.665924144253385*^9}, {
+   3.665924320860283*^9, 3.665924414647759*^9}, {3.665924670042881*^9, 
+   3.665924670594768*^9}, {3.666043305109386*^9, 3.6660433538174763`*^9}, {
+   3.667113925785325*^9, 3.667113927513233*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"f0fef0aa-5a88-4414-ae11-a37f6eef5937"],
+
+Cell[TextData[{
+ StyleBox["The built-in Mathematic function ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox["Reverse", "Input",
+  FontSize->14],
+ StyleBox[",",
+  FontSize->14],
+ StyleBox[" correctly performs the symbolic Hermitian conjugate operation on ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox["vec", "Input",
+  FontSize->14],
+ StyleBox[".", "Input",
+  FontSize->14,
+  FontWeight->"Plain"],
+ StyleBox[" ", "Input",
+  FontFamily->"Century Schoolbook",
+  FontSize->14,
+  FontWeight->"Plain"],
+ StyleBox["Such that ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox["vec", "Input",
+  FontSize->14],
+ StyleBox["\[Dagger] = ", "EquationNumbered",
+  FontSize->14,
+  FontWeight->"Bold"],
+ StyleBox["vec1 =", "Input",
+  FontSize->14],
+ StyleBox[" ", "Input",
+  FontSize->14,
+  FontWeight->"Plain"],
+ StyleBox["Reverse/@vec ", "Input",
+  FontSize->14],
+ StyleBox["and  ",
+  FontSize->14],
+ StyleBox["NPA = Outer[CircleTimes,vec1,vec]", "Input",
+  FontSize->14],
+ StyleBox[" ", "Input",
+  FontFamily->"Century Schoolbook",
+  FontSize->14,
+  FontWeight->"Plain"],
+ StyleBox["as in eq.(7).",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ "\n",
+ StyleBox["A sample of the symbolic output produced in ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox["NPA", "Input",
+  FontFamily->"Century Schoolbook",
+  FontSize->14,
+  FontWeight->"Plain"],
+ StyleBox[" for this 2-(2222) example is: ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{{3.665924816490651*^9, 3.665924819273505*^9}, {
+   3.665924877201674*^9, 3.665924889734948*^9}, {3.66592511191241*^9, 
+   3.6659251221702833`*^9}, {3.666043420328905*^9, 3.666043523716752*^9}, {
+   3.666043554053199*^9, 3.666043662063984*^9}, {3.666045253267035*^9, 
+   3.6660453586569157`*^9}, 3.66604704459175*^9, {3.6660486906152983`*^9, 
+   3.666048702429216*^9}, {3.667114560491744*^9, 
+   3.6671145604931*^9}},ExpressionUUID->"c3aa09ff-94c4-49b0-a700-\
+eaf3a4b72848"],
+
+Cell["\<\
+
+\
+\>", "Text",
+ CellChangeTimes->{{3.665924816490651*^9, 3.665924819273505*^9}, {
+   3.665924877201674*^9, 3.665924889734948*^9}, {3.66592511191241*^9, 
+   3.6659251221702833`*^9}, {3.666043420328905*^9, 3.666043523716752*^9}, {
+   3.666043554053199*^9, 3.666043662063984*^9}, {3.666045253267035*^9, 
+   3.6660453586569157`*^9}, 3.66604704459175*^9, {3.6660486906152983`*^9, 
+   3.666048702429216*^9}, 
+   3.667114560491744*^9},ExpressionUUID->"ba279b61-a9ff-4772-863b-\
+627abef9014b"],
+
+Cell[BoxData[
+ RowBox[{"                ", 
+  RowBox[{
+   StyleBox[
+    StyleBox["NPA", "Input",
+     FontSize->16], "Input",
+    FontSize->16], 
+   StyleBox[" ", "Input",
+    FontSize->16], 
+   StyleBox["=", "Input",
+    FontSize->16], 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"\[CapitalIota]", 
+        TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+            RowBox[{"1", ",", "1"}], "}"}]},
+         "Superscript"], 
+        TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+            RowBox[{"2", ",", "1"}], "}"}]},
+         "Superscript"], 
+        TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+            RowBox[{"1", ",", "1"}], "}"}]},
+         "Superscript"], "\[CenterEllipsis]", 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+            RowBox[{"1", ",", "1"}], "}"}]},
+         "Superscript"], 
+        TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+            RowBox[{"1", ",", "1"}], "}"}]},
+         "Superscript"], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], "\[CenterEllipsis]", 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+            RowBox[{"2", ",", "1"}], "}"}]},
+         "Superscript"], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+            RowBox[{"2", ",", "1"}], "}"}]},
+         "Superscript"], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], "\[CenterEllipsis]", 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+            RowBox[{"1", ",", "1"}], "}"}]},
+         "Superscript"], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+            RowBox[{"1", ",", "1"}], "}"}]},
+         "Superscript"], "\[CenterEllipsis]", 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+            RowBox[{"2", ",", "1"}], "}"}]},
+         "Superscript"], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], "\[CenterEllipsis]", 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], "\[CenterEllipsis]", 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], "\[CenterEllipsis]", 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], "\[CenterEllipsis]", 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {"\[VerticalEllipsis]", "\[VerticalEllipsis]", "\[VerticalEllipsis]", 
+        "\[VerticalEllipsis]", "\[DescendingEllipsis]", "\[VerticalEllipsis]"},
+       {
+        RowBox[{
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}], "\[IndentingNewLine]"}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}], 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}], "\[CenterEllipsis]", 
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}]}]], "Text",
+ CellChangeTimes->{
+  3.665925573242606*^9, {3.6659259438328657`*^9, 3.665926017157033*^9}, {
+   3.665926052642398*^9, 3.665926291933979*^9}, {3.6659263630591288`*^9, 
+   3.665926409232572*^9}, {3.665939394799973*^9, 3.665939405227912*^9}, 
+   3.666005370896549*^9, {3.667114547779608*^9, 3.66711454941089*^9}, {
+   3.678364265582642*^9, 
+   3.678364267684874*^9}},ExpressionUUID->"52ea49e3-3c14-432a-b2cc-\
+b89e579fa255"],
+
+Cell[TextData[{
+ StyleBox["The code then looks through this matrix to find all the unique \
+elements, which it ouputs in a vector ",
+  FontSize->14],
+ StyleBox["UniqueElements", "Input",
+  FontSize->14],
+ StyleBox[" ",
+  FontSize->16],
+ StyleBox["(which are still in canonical order). A sample of this vector is \
+shown below",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{
+  3.6635019759516087`*^9, {3.665925786119079*^9, 3.665925825154881*^9}, {
+   3.665925865770051*^9, 3.66592588680681*^9}, {3.665927278556916*^9, 
+   3.66592728090838*^9}, {3.665927339494185*^9, 3.6659273578427973`*^9}, {
+   3.665927605877433*^9, 3.665927624460774*^9}, 3.6659389760252647`*^9, 
+   3.665939434670706*^9},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"ddc2f352-24e5-4be1-841b-9db9e8ff3389"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{
+   StyleBox[
+    StyleBox[
+     RowBox[{"Unique", 
+      StyleBox["E", "Input",
+       FontSize->16], "lements"}]], "Input",
+    FontSize->14,
+    FontWeight->"Bold"], 
+   StyleBox[" ", "Input",
+    FontSize->14,
+    FontWeight->"Bold"], 
+   StyleBox["=", "Input",
+    FontSize->14], 
+   RowBox[{"(", "\[NoBreak]", 
+    TagBox[GridBox[{
+       {"\[CapitalIota]"},
+       {
+        TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+            RowBox[{"1", ",", "1"}], "}"}]},
+         "Superscript"]},
+       {
+        TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+            RowBox[{"2", ",", "1"}], "}"}]},
+         "Superscript"]},
+       {
+        TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+            RowBox[{"1", ",", "1"}], "}"}]},
+         "Superscript"]},
+       {
+        TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+            RowBox[{"2", ",", "1"}], "}"}]},
+         "Superscript"]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {"\[VerticalEllipsis]"},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]}]},
+       {
+        RowBox[{
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"], "\[CircleTimes]", 
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]}]}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.5599999999999999]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}],
+     Column], "\[NoBreak]", ")"}]}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Text",
+ CellChangeTimes->{
+  3.665925779084238*^9, {3.6659273638351088`*^9, 3.665927372879065*^9}, {
+   3.665939386622116*^9, 3.665939426388052*^9}, {3.667114843250965*^9, 
+   3.667114844273181*^9}},ExpressionUUID->"fcfcbc36-6605-400e-aa88-\
+e9ebaf22b2e3"],
+
+Cell[TextData[{
+ StyleBox["The length of this is given by ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox["Length[UniqueElements]", "Input",
+  FontSize->14],
+ StyleBox[" ", "Input",
+  FontSize->14,
+  FontWeight->"Plain"],
+ StyleBox["and represents the number of unique sequences in the NPA matrix. \
+Each term in the list is assigned a unique number -- its position in the \
+list, by which it can be identified. ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{{3.665927233264208*^9, 3.6659273245715513`*^9}, {
+   3.665927405349043*^9, 3.6659275855418587`*^9}, {3.665939440869088*^9, 
+   3.665939445407542*^9}, {3.665939483731646*^9, 3.665939537801425*^9}, {
+   3.665941789341938*^9, 3.6659418228367977`*^9}, 3.665941944659054*^9, 
+   3.666005553446411*^9, {3.6660056156618147`*^9, 3.666005643773307*^9}, 
+   3.666014469198059*^9, {3.666043695939138*^9, 3.6660437141966057`*^9}, {
+   3.666047163285533*^9, 3.6660471646214333`*^9}, {3.667113960427169*^9, 
+   3.66711398818587*^9}},ExpressionUUID->"2dced691-9028-444e-97ab-\
+8ab5caed1ee5"],
+
+Cell[TextData[{
+ StyleBox["This list is then implemented in the function ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox["mymap[x_],", "Input",
+  FontSize->14],
+ StyleBox["which parses the list of unique elements one at a time to find \
+where all instances of that entry occur in the ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox["NPA", "Input",
+  FontSize->16],
+ StyleBox[" ", "Input",
+  FontFamily->"Century Schoolbook",
+  FontSize->14,
+  FontWeight->"Plain"],
+ StyleBox["matrix, replacing a match with a 1, and a non-match with a 0. The \
+input",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox[" ",
+  FontSize->16],
+ StyleBox["x", "Input",
+  FontSize->16],
+ StyleBox[" ranges from 1 (the first element of the ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox["UniqueElements", "Input",
+  FontSize->14],
+ StyleBox[" to ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox["Length[UniqueElements],", "Input",
+  FontSize->14],
+ StyleBox[" ", "Input",
+  FontFamily->"Century Schoolbook",
+  FontSize->14,
+  FontWeight->"Plain"],
+ StyleBox["i.e. the last element of the list. For every input",
+  FontFamily->"Century Schoolbook",
+  FontSize->14],
+ StyleBox[" ",
+  FontSize->16],
+ StyleBox["x", "Input",
+  FontSize->16],
+ StyleBox[" ",
+  FontSize->16],
+ StyleBox["a sparse matrix is created. ",
+  FontFamily->"Century Schoolbook",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{{3.665927233264208*^9, 3.6659273245715513`*^9}, {
+  3.665927405349043*^9, 3.6659275855418587`*^9}, {3.665939440869088*^9, 
+  3.665939445404842*^9}, {3.6659396130776587`*^9, 3.665939624351674*^9}, {
+  3.666047225917104*^9, 
+  3.666047227236014*^9}},ExpressionUUID->"f6780c1a-3a35-4e29-973a-\
+1c53f1f5d76a"],
+
+Cell[TextData[StyleBox["The final step in the code is to create the matrix \
+representing the derived constraints. This is simply implemented by summing \
+the sparse matrices with their unique numbers ",
+ FontFamily->"Century Schoolbook",
+ FontSize->14]], "Text",
+ CellChangeTimes->{{3.665927233264208*^9, 3.6659273245715513`*^9}, {
+   3.665927405349043*^9, 3.6659275855418587`*^9}, {3.665939440869088*^9, 
+   3.665939445404842*^9}, {3.6659396130776587`*^9, 3.665939672062496*^9}, {
+   3.6659398073308477`*^9, 3.6659398168326406`*^9}, {3.665940196932541*^9, 
+   3.665940205619783*^9}, 3.665940266434741*^9, {3.665940642345008*^9, 
+   3.6659406869881268`*^9}, {3.665940717368207*^9, 3.6659407176879053`*^9}, {
+   3.665940932595635*^9, 3.6659409599842567`*^9}, {3.665941003455822*^9, 
+   3.665941022126832*^9}, {3.665941726166622*^9, 3.665941780949716*^9}, {
+   3.665941828252808*^9, 3.665941834620696*^9}, {3.666005583614551*^9, 
+   3.6660055906864433`*^9}},ExpressionUUID->"f5d938b3-d64c-4849-b3b2-\
+854a51790a77"],
+
+Cell[BoxData[
+ FormBox[
+  RowBox[{
+   StyleBox["constraints",
+    FontSize->16], 
+   StyleBox[" ",
+    FontSize->16], 
+   StyleBox["=",
+    FontSize->16], 
+   StyleBox[" ",
+    FontSize->16], 
+   RowBox[{
+    SubscriptBox[
+     StyleBox["\[Sum]",
+      FontSize->16], 
+     RowBox[{" ", 
+      StyleBox["x",
+       FontSize->12]}]], 
+    StyleBox[
+     RowBox[{" ", 
+      StyleBox[" ",
+       FontSize->16]}]], 
+    RowBox[{
+     StyleBox["x",
+      FontSize->16], 
+     StyleBox["  ",
+      FontSize->16], 
+     StyleBox[
+      RowBox[{"mymap", "[", "x", "]"}], "Input",
+      FontSize->14]}]}]}], TraditionalForm]], "ExerciseEquationNumbered",
+ CellChangeTimes->{
+  3.6634794567834*^9, {3.6635745867190027`*^9, 3.6635747353316927`*^9}, {
+   3.663576800656639*^9, 3.663576927019453*^9}, 3.663577081271845*^9, {
+   3.665923285520823*^9, 3.665923348556683*^9}, {3.665924057179413*^9, 
+   3.665924106116168*^9}, {3.665924138009322*^9, 3.665924144253385*^9}, {
+   3.665924320860283*^9, 3.665924414647759*^9}, {3.665924670042881*^9, 
+   3.665924670594768*^9}, {3.665924839340025*^9, 3.6659248623467827`*^9}, {
+   3.6659418495108013`*^9, 3.665941912389789*^9}, 3.6659454199858503`*^9, {
+   3.6660453813086023`*^9, 3.6660454235208817`*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"c8535e2a-0501-4bd8-b4d9-6c5f70cb2405"],
+
+Cell[TextData[StyleBox["In our example, the code would output  ",
+ FontFamily->"Century Schoolbook",
+ FontSize->14]], "Text",
+ CellChangeTimes->{{3.665927233264208*^9, 3.6659273245715513`*^9}, {
+   3.665927405349043*^9, 3.6659275855418587`*^9}, {3.665939440869088*^9, 
+   3.665939445404842*^9}, {3.6659396130776587`*^9, 3.665939672062496*^9}, {
+   3.6659398073308477`*^9, 3.6659398168326406`*^9}, {3.665940196932541*^9, 
+   3.665940205619783*^9}, 3.665940266434741*^9, {3.665940642345008*^9, 
+   3.6659406869881268`*^9}, {3.665940717368207*^9, 3.6659407176879053`*^9}, {
+   3.665940932595635*^9, 3.6659409599842567`*^9}, {3.665941003455822*^9, 
+   3.665941022126832*^9}, {3.665941726166622*^9, 3.665941775805797*^9}, {
+   3.665941981178845*^9, 3.665942009207513*^9}, {3.665945393320204*^9, 
+   3.665945394839944*^9}},ExpressionUUID->"e26f5e08-944b-4601-a424-\
+bcc879744dcd"],
+
+Cell[TextData[{
+ StyleBox["constraints = ", "Input",
+  FontSize->14],
+ " ",
+ Cell[BoxData[
+  TagBox[
+   RowBox[{"(", "\[NoBreak]", GridBox[{
+      {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"},
+      {"2", "2", "6", "7", "8", "6", "7", "8", "14", "15", "16", "17", "18"},
+      {"3", "9", "3", "10", "11", "19", "20", "21", "9", "10", "11", "22", 
+       "23"},
+      {"4", "7", "10", "4", "12", "15", "7", "17", "20", "10", "22", "12", 
+       "24"},
+      {"5", "8", "11", "13", "5", "16", "18", "8", "21", "23", "11", "25", 
+       "13"},
+      {"9", "9", "19", "20", "21", "19", "20", "21", "26", "27", "28", "29", 
+       "30"},
+      {"7", "7", "15", "7", "17", "15", "7", "17", "31", "15", "32", "17", 
+       "33"},
+      {"8", "8", "16", "18", "8", "16", "18", "8", "34", "35", "16", "36", 
+       "18"},
+      {"6", "14", "6", "15", "16", "37", "31", "34", "14", "15", "16", "32", 
+       "35"},
+      {"10", "20", "10", "10", "22", "27", "20", "29", "20", "10", "22", "22",
+        "38"},
+      {"11", "21", "11", "23", "11", "28", "30", "21", "21", "23", "11", "39",
+        "23"},
+      {"13", "18", "23", "13", "25", "35", "18", "36", "30", "23", "39", "25",
+        "40"},
+      {"12", "17", "22", "24", "12", "32", "33", "17", "29", "38", "22", "41",
+        "24"}
+     },
+     GridBoxAlignment->{
+      "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}},
+        "RowsIndexed" -> {}},
+     GridBoxSpacings->{"Columns" -> {
+         Offset[0.27999999999999997`], {
+          Offset[0.7]}, 
+         Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+         Offset[0.2], {
+          Offset[0.4]}, 
+         Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+   Function[BoxForm`e$, 
+    MatrixForm[BoxForm`e$]]]],
+  CellChangeTimes->{{3.665941687496031*^9, 3.66594170563382*^9}},
+  ExpressionUUID->"6481dae9-73f4-4324-aadf-fc04a5fbbb18"]
+}], "Text",
+ CellChangeTimes->{{3.665927233264208*^9, 3.6659273245715513`*^9}, {
+   3.665927405349043*^9, 3.6659275855418587`*^9}, {3.665939440869088*^9, 
+   3.665939445404842*^9}, {3.6659396130776587`*^9, 3.665939672062496*^9}, {
+   3.6659398073308477`*^9, 3.6659398168326406`*^9}, {3.665940196932541*^9, 
+   3.665940205619783*^9}, 3.665940266434741*^9, {3.665940642345008*^9, 
+   3.6659406869881268`*^9}, {3.665940717368207*^9, 3.6659407176879053`*^9}, {
+   3.665940932595635*^9, 3.6659409599842567`*^9}, {3.665941003455822*^9, 
+   3.665941022126832*^9}, {3.665941726166622*^9, 3.665941775805797*^9}, {
+   3.665941981178845*^9, 3.665941984091662*^9}, 3.665942020050643*^9, {
+   3.665945378087552*^9, 
+   3.66594541249557*^9}},ExpressionUUID->"6dce0777-729f-4f5d-a810-\
+ad96950604ef"],
+
+Cell[TextData[StyleBox["and export a .mat file of this matrix to the default \
+location on the user\[CloseCurlyQuote]s computer. It is important that when \
+implementing the constraints the user obeys the canonical order: for this \
+reason the code also outputs the constraints and the unique elements \
+visually. ",
+ FontFamily->"Century Schoolbook",
+ FontSize->14]], "Text",
+ CellChangeTimes->{{3.665927233264208*^9, 3.6659273245715513`*^9}, {
+   3.665927405349043*^9, 3.6659275855418587`*^9}, {3.665939440869088*^9, 
+   3.665939445404842*^9}, {3.6659396130776587`*^9, 3.665939672062496*^9}, {
+   3.6659398073308477`*^9, 3.6659398168326406`*^9}, {3.665940196932541*^9, 
+   3.665940205619783*^9}, 3.665940266434741*^9, {3.665940642345008*^9, 
+   3.6659406869881268`*^9}, {3.665940717368207*^9, 3.6659407176879053`*^9}, {
+   3.665940932595635*^9, 3.6659409599842567`*^9}, {3.665941003455822*^9, 
+   3.665941022126832*^9}, {3.665941726166622*^9, 3.665941775805797*^9}, {
+   3.665941981178845*^9, 3.665941984090554*^9}, {3.665942021952491*^9, 
+   3.665942039087014*^9}, {3.666005608504138*^9, 3.666005609605982*^9}, {
+   3.667117847980743*^9, 
+   3.667117880239593*^9}},ExpressionUUID->"610e406b-a449-4962-b137-\
+2e3928b8f604"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Examples",
+ FontSize->24]], "Section",
+ Editable->False,
+ Deletable->False,
+ ShowSelection->True,
+ Enabled->False,
+ CellChangeTimes->{{3.663478852467031*^9, 3.663478854783263*^9}, 
+   3.663479456715706*^9, {3.663480237843244*^9, 3.66348025163411*^9}, {
+   3.6634878105545187`*^9, 3.6634878115843782`*^9}},
+ FontFamily->"Century Schoolbook",
+ FontSize->12,
+ FontWeight->"Plain",ExpressionUUID->"9484f1c2-e8fb-465e-b0c5-d635839d7d7f"],
+
+Cell[TextData[StyleBox["Here we provide a few example outputs of the code. ",
+ FontSize->14]], "Text",
+ Editable->True,
+ Deletable->True,
+ ShowSelection->True,
+ Enabled->False,
+ CellChangeTimes->{{3.593851637462728*^9, 3.5938516377335787`*^9}, 
+   3.663479456719089*^9, {3.663488035778838*^9, 3.6634880452959013`*^9}, {
+   3.663488628020631*^9, 3.66348864156327*^9}, 3.663488905771141*^9, {
+   3.663489176443254*^9, 3.663489244176489*^9}, {3.663489288148547*^9, 
+   3.663489377691918*^9}, {3.6635006623640842`*^9, 3.6635006623641567`*^9}, {
+   3.6659253670518217`*^9, 3.665925367219356*^9}, {3.665946969496073*^9, 
+   3.66594700281278*^9}, {3.666043910920064*^9, 3.666043938376008*^9}, {
+   3.6660439742173*^9, 3.66604397600576*^9}, {3.666044008982102*^9, 
+   3.6660440375162973`*^9}, {3.6660454450272207`*^9, 3.666045457576579*^9}, {
+   3.6671132500905952`*^9, 3.66711326928096*^9}, {3.6671133621422453`*^9, 
+   3.667113385615152*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"3297255d-6506-4ba0-b175-79eb14ce4718"],
+
+Cell[TextData[StyleBox["Consider level 1 of the hierarchy with 2 parties, who \
+have 2 inputs and 2 ouptuts each:",
+ FontSize->14]], "Text",
+ Editable->True,
+ Deletable->True,
+ ShowSelection->True,
+ Enabled->False,
+ CellChangeTimes->{{3.593851637462728*^9, 3.5938516377335787`*^9}, 
+   3.663479456719089*^9, {3.663488035778838*^9, 3.6634880452959013`*^9}, {
+   3.663488628020631*^9, 3.66348864156327*^9}, 3.663488905771141*^9, {
+   3.663489176443254*^9, 3.663489244176489*^9}, {3.663489288148547*^9, 
+   3.663489377691918*^9}, {3.6635006623640842`*^9, 3.6635006623641567`*^9}, {
+   3.6659253670518217`*^9, 3.665925367219356*^9}, {3.665946969496073*^9, 
+   3.66594700281278*^9}, {3.666043910920064*^9, 3.666043938376008*^9}, {
+   3.6660439742173*^9, 3.66604397600576*^9}, {3.666044008982102*^9, 
+   3.6660440375162973`*^9}, {3.6660454450272207`*^9, 3.666045457576579*^9}, {
+   3.6671132500905952`*^9, 3.66711326928096*^9}, {3.6671133621422453`*^9, 
+   3.66711339046214*^9}, {3.667117911668096*^9, 3.667117912086809*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"a0c69bfa-6a53-4460-9840-28c177bf5fc8"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"NPAmat", "[", 
+  RowBox[{"1", ",", "2", ",", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", "2"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", "2"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.6670227364667253`*^9, 3.66702275536195*^9}, {
+  3.667022958180048*^9, 3.667022988223637*^9}, {3.66711333573829*^9, 
+  3.6671133366952744`*^9}},
+ FontSize->14,ExpressionUUID->"7b47a000-cadb-45e7-b5e7-c6c6e495c33a"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"\[CapitalIota]"},
+        {
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]},
+        {
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]},
+        {
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]},
+        {
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]}
+       },
+       GridBoxAlignment->{
+        "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+         "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}, "RowsIndexed" -> {}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"1", "2", "3", "4", "5"},
+       {"2", "2", "6", "7", "8"},
+       {"3", "9", "3", "10", "11"},
+       {"4", "7", "10", "4", "12"},
+       {"5", "8", "11", "13", "5"}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[
+   MatrixForm[{$CellContext`\[CapitalIota], 
+     Superscript[
+      Subscript[$CellContext`e, 1], {1, 1}], 
+     Superscript[
+      Subscript[$CellContext`e, 1], {2, 1}], 
+     Superscript[
+      Subscript[$CellContext`e, 2], {1, 1}], 
+     Superscript[
+      Subscript[$CellContext`e, 2], {2, 1}], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 1], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 1], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 2], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 2], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {1, 1}]]}], 
+   MatrixForm[{{1, 2, 3, 4, 5}, {2, 2, 6, 7, 8}, {3, 9, 3, 10, 11}, {4, 7, 10,
+     4, 12}, {5, 8, 11, 13, 5}}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.6670230432888603`*^9, {3.667023162535184*^9, 3.667023188220806*^9}, {
+   3.6670232212945013`*^9, 3.667023229773698*^9}, 3.667023278188513*^9, {
+   3.6670233273238564`*^9, 3.667023342408189*^9}, {3.6670234486703997`*^9, 
+   3.667023493779687*^9}, {3.667023545508651*^9, 3.667023558504262*^9}, {
+   3.667027289131575*^9, 3.667027349718939*^9}, 
+   3.667113337310789*^9},ExpressionUUID->"e7eda1d5-0d7e-4246-850b-\
+b9c1cdb804ef"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"\[CapitalIota]", ",", 
+     TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+         RowBox[{"1", ",", "1"}], "}"}]},
+      "Superscript"], ",", 
+     TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+         RowBox[{"2", ",", "1"}], "}"}]},
+      "Superscript"], ",", 
+     TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+         RowBox[{"1", ",", "1"}], "}"}]},
+      "Superscript"], ",", 
+     TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+         RowBox[{"2", ",", "1"}], "}"}]},
+      "Superscript"], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2", ",", "3", ",", "4", ",", "5"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", "2", ",", "6", ",", "7", ",", "8"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", "9", ",", "3", ",", "10", ",", "11"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"4", ",", "7", ",", "10", ",", "4", ",", "12"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"5", ",", "8", ",", "11", ",", "13", ",", "5"}], "}"}]}], "}"}],
+    ",", "\<\"NPAmat_lnmd_12_22_22.mat\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.667023493791236*^9, {3.667023545523697*^9, 3.667023558514304*^9}, {
+   3.667027289182954*^9, 3.667027349731632*^9}, 
+   3.6671133373191977`*^9},ExpressionUUID->"ac369656-9472-4767-b0e4-\
+af5131375326"]
+}, Open  ]],
+
+Cell[TextData[StyleBox["The non-locality scenario with 3 parties, each with 2 \
+inputs and 2 outputs at level 1 of the hierarchy gives:",
+ FontFamily->"Century Schoolbook",
+ FontSize->14]], "Text",
+ Editable->False,
+ Deletable->False,
+ ShowSelection->True,
+ Enabled->False,
+ CellChangeTimes->{{3.666046260199904*^9, 3.666046285555036*^9}, {
+  3.666046571618301*^9, 
+  3.6660465871778107`*^9}},ExpressionUUID->"9d53c0a2-d19c-42e6-81ac-\
+73aaac42a80a"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"NPAmat", "[", 
+  RowBox[{"1", ",", " ", "3", ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", " ", "2", ",", " ", "2"}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", " ", "2", ",", " ", "2"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.667111746522716*^9, 3.6671117474492273`*^9}},
+ FontSize->14,ExpressionUUID->"0ff75311-b93c-4691-a266-c5df687651cf"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"\[CapitalIota]"},
+        {
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]},
+        {
+         TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]},
+        {
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]},
+        {
+         TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]},
+        {
+         TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}]},
+          "Superscript"]},
+        {
+         TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+             RowBox[{"2", ",", "1"}], "}"}]},
+          "Superscript"]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"]}]},
+        {
+         RowBox[{
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"2", ",", "1"}], "}"}]},
+           "Superscript"], "\[CircleTimes]", 
+          TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}]},
+           "Superscript"]}]}
+       },
+       GridBoxAlignment->{
+        "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+         "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}, "RowsIndexed" -> {}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"1", "2", "3", "4", "5", "6", "7"},
+       {"2", "2", "8", "9", "10", "11", "12"},
+       {"3", "13", "3", "14", "15", "16", "17"},
+       {"4", "9", "14", "4", "18", "19", "20"},
+       {"5", "10", "15", "21", "5", "22", "23"},
+       {"6", "11", "16", "19", "22", "6", "24"},
+       {"7", "12", "17", "20", "23", "25", "7"}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[
+   MatrixForm[{$CellContext`\[CapitalIota], 
+     Superscript[
+      Subscript[$CellContext`e, 1], {1, 1}], 
+     Superscript[
+      Subscript[$CellContext`e, 1], {2, 1}], 
+     Superscript[
+      Subscript[$CellContext`e, 2], {1, 1}], 
+     Superscript[
+      Subscript[$CellContext`e, 2], {2, 1}], 
+     Superscript[
+      Subscript[$CellContext`e, 3], {1, 1}], 
+     Superscript[
+      Subscript[$CellContext`e, 3], {2, 1}], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 1], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 3], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 3], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 1], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 3], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 1], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 3], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 2], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 2], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 3], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 2], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 3], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 2], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 2], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 2], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 3], {1, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 2], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 3], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 3], {1, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 3], {2, 1}]], 
+     CircleTimes[
+      Superscript[
+       Subscript[$CellContext`e, 3], {2, 1}], 
+      Superscript[
+       Subscript[$CellContext`e, 3], {1, 1}]]}], 
+   MatrixForm[{{1, 2, 3, 4, 5, 6, 7}, {2, 2, 8, 9, 10, 11, 12}, {3, 13, 3, 14,
+     15, 16, 17}, {4, 9, 14, 4, 18, 19, 20}, {5, 10, 15, 21, 5, 22, 23}, {6, 
+    11, 16, 19, 22, 6, 24}, {7, 12, 17, 20, 23, 25, 7}}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.667111748129324*^9},ExpressionUUID->"958acd7c-bca3-4461-a0c2-\
+6a6f0709823e"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"\[CapitalIota]", ",", 
+     TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+         RowBox[{"1", ",", "1"}], "}"}]},
+      "Superscript"], ",", 
+     TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+         RowBox[{"2", ",", "1"}], "}"}]},
+      "Superscript"], ",", 
+     TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+         RowBox[{"1", ",", "1"}], "}"}]},
+      "Superscript"], ",", 
+     TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+         RowBox[{"2", ",", "1"}], "}"}]},
+      "Superscript"], ",", 
+     TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+         RowBox[{"1", ",", "1"}], "}"}]},
+      "Superscript"], ",", 
+     TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+         RowBox[{"2", ",", "1"}], "}"}]},
+      "Superscript"], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "1"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "2"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"]}], ",", 
+     RowBox[{
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}]},
+       "Superscript"], "\[CircleTimes]", 
+      TemplateBox[{SubscriptBox["e", "3"],RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}]},
+       "Superscript"]}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "3", ",", "4", ",", "5", ",", "6", ",", "7"}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "2", ",", "2", ",", "8", ",", "9", ",", "10", ",", "11", ",", "12"}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "3", ",", "13", ",", "3", ",", "14", ",", "15", ",", "16", ",", "17"}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "4", ",", "9", ",", "14", ",", "4", ",", "18", ",", "19", ",", "20"}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "5", ",", "10", ",", "15", ",", "21", ",", "5", ",", "22", ",", "23"}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "6", ",", "11", ",", "16", ",", "19", ",", "22", ",", "6", ",", "24"}], 
+      "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "7", ",", "12", ",", "17", ",", "20", ",", "23", ",", "25", ",", "7"}], 
+      "}"}]}], "}"}], ",", "\<\"NPAmat_lnmd_13_222_222.mat\"\>"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{
+  3.6671117481313457`*^9},ExpressionUUID->"ce41c214-f612-432e-908e-\
+ba86124557d2"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Bibliography",
+ FontSize->18,
+ FontWeight->"Bold"]], "AppendixSectionNumber",
+ CellChangeTimes->{
+  3.6634794567835712`*^9, {3.6660357959347143`*^9, 3.666035797036623*^9}, {
+   3.666036001524897*^9, 3.666036004211369*^9}},
+ FontFamily->"Century Schoolbook",
+ FontSize->12,
+ FontWeight->"Plain",ExpressionUUID->"92ae0b9e-7ebb-4752-b11f-fa46aa022177"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "[1] Miguel Navasc\[UAcute]es, Stefano Pironio, Antonio Ac\[IAcute]n, \
+\[OpenCurlyDoubleQuote]",
+ StyleBox["Bounding the Set of Quantum Correlations,",
+  FontSlant->"Italic"],
+ "\[CloseCurlyDoubleQuote] "
+}], "Reference",
+ CellChangeTimes->{
+  3.663479456786676*^9, {3.666035818766192*^9, 3.666035845539797*^9}, {
+   3.666035941329177*^9, 3.666035983389882*^9}, {3.6671135269290543`*^9, 
+   3.66711354521874*^9}, {3.667113577386632*^9, 3.667113585137163*^9}, {
+   3.667113694181967*^9, 3.6671136942688007`*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"de094b8d-b20d-4c0d-8af0-b3335b849d94"],
+
+Cell[TextData[{
+ "\t\tPhys. Rev. Lett. ",
+ StyleBox["98",
+  FontWeight->"Bold"],
+ " 010401 (2007)"
+}], "Reference",
+ CellChangeTimes->{
+  3.663479456788103*^9, {3.667113598037675*^9, 3.667113628030959*^9}, {
+   3.6671137072046127`*^9, 3.667113708221278*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"f8e5d82a-5700-4a6b-af13-b2a006945988"],
+
+Cell[TextData[{
+ "[2] Miguel Navasc\[UAcute]es, Stefano Pironio, Antonio Ac\[IAcute]n, \
+\[OpenCurlyDoubleQuote]",
+ StyleBox["A convergent hierarchy of semidefinite programs characterizing the \
+set of quantum correlations",
+  FontSlant->"Italic"],
+ ",\[CloseCurlyDoubleQuote] "
+}], "Reference",
+ CellChangeTimes->{
+  3.663479456786676*^9, {3.666035818766192*^9, 3.666035845539797*^9}, {
+   3.666035941329177*^9, 3.666035983391164*^9}, {3.666043051565133*^9, 
+   3.666043052524804*^9}, {3.667113558488678*^9, 3.667113580871896*^9}, {
+   3.6671136965888166`*^9, 3.667113696700736*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"f5f3f972-979b-4561-a294-cf51992bf60d"],
+
+Cell[TextData[{
+ "\t\tNew J. Phys. ",
+ StyleBox["10",
+  FontWeight->"Bold"],
+ ", 073013 (2008)"
+}], "Reference",
+ CellChangeTimes->{
+  3.663479456786676*^9, {3.666035818766192*^9, 3.666035845539797*^9}, {
+   3.666035941329177*^9, 3.666035983389882*^9}, {3.6671135269290543`*^9, 
+   3.6671135269390907`*^9}, {3.667113703291718*^9, 3.667113710029291*^9}},
+ FontFamily->
+  "Century Schoolbook",ExpressionUUID->"ad7bf3f9-0773-4463-aa51-82d4812b6215"]
+}, Open  ]]
+}, Open  ]]
+},
+PrintingStyleEnvironment->"Working",
+WindowSize->{1192, 849},
+WindowMargins->{{Automatic, 9}, {Automatic, 0}},
+PrintingCopies->1,
+PrintingStartingPageNumber->1,
+PrintingPageRange->{1, Automatic},
+PageHeaders->{{None, None, None}, {None, None, None}},
+PageFooters->{{None, None, None}, {None, None, None}},
+PageHeaderLines->{False, False},
+PageFooterLines->{False, False},
+PrintingOptions->{"FacingPages"->True,
+"FirstPageFace"->Right,
+"FirstPageFooter"->True,
+"FirstPageHeader"->False},
+Magnification:>2. Inherited,
+FrontEndVersion->"11.1 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 18, \
+2017)",
+StyleDefinitions->Notebook[{
+   Cell[
+    StyleData[
+    StyleDefinitions -> 
+     FrontEnd`FileName[{"Book"}, "Textbook.nb", CharacterEncoding -> 
+       "UTF-8"]]], 
+   Cell[
+    StyleData[All, "Printout"], ShowSyntaxStyles -> True], 
+   Cell[
+    StyleData[All, "Working"], Magnification -> 0.6]}, Visible -> False, 
+  FrontEndVersion -> 
+  "11.1 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 18, 2017)", 
+  StyleDefinitions -> "PrivateStylesheetFormatting.nb"],
+PrivateNotebookOptions -> {"NotebookAuthor" -> ""}
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 121, 3, 25, "Text", "ExpressionUUID" -> \
+"247b75da-4d14-4422-94f6-d48b12d95c36"],
+Cell[CellGroupData[{
+Cell[703, 27, 313, 7, 29, "Text", "ExpressionUUID" -> \
+"cea7a17d-e289-4211-aa31-2a121fe53b24",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.}],
+Cell[1019, 36, 436, 9, 122, "BookChapterNumber", "ExpressionUUID" -> \
+"813f01f8-2716-45fe-b229-55ae26d75d7f",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.}],
+Cell[1458, 47, 860, 15, 227, "BookChapterTitle", "ExpressionUUID" -> \
+"83c4517c-3b9a-4f20-8a57-681d525446ed",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.}],
+Cell[2321, 64, 372, 8, 25, "Text", "ExpressionUUID" -> \
+"786f7d52-e6f6-4332-afe1-27a8466435b0",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.}],
+Cell[2696, 74, 737, 21, 130, "Text", "ExpressionUUID" -> \
+"08fd3fec-79da-4079-b3c0-828cc55ca725",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.}]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3470, 100, 377, 8, 82, "Section", "ExpressionUUID" -> \
+"92d61517-4570-45f5-9249-6dfe3d72fda4"],
+Cell[3850, 110, 2068, 41, 204, "Text", "ExpressionUUID" -> \
+"a926f0f5-19ac-494a-a483-e7cb9c4c6640"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5955, 156, 425, 9, 82, "Section", "ExpressionUUID" -> \
+"d317574f-01db-4e67-a267-abc1e732706c",
+ Evaluatable->False],
+Cell[6383, 167, 2772, 71, 130, "Text", "ExpressionUUID" -> \
+"9af1547e-8316-4bbd-a375-3acfbaf949f5",
+ Evaluatable->False],
+Cell[9158, 240, 1025, 26, 69, "Input", "ExpressionUUID" -> \
+"e1a53e4a-813a-41a4-a408-bc2343ebf646",
+ Evaluatable->False],
+Cell[10186, 268, 408, 11, 31, "Text", "ExpressionUUID" -> \
+"0bc02d65-bc27-41f7-853a-d631bb3c7004",
+ Evaluatable->False]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10631, 284, 282, 6, 82, "Section", "ExpressionUUID" -> \
+"f7ec601e-259f-487f-8c9b-49d41bf7b61a"],
+Cell[10916, 292, 15860, 336, 969, "Code", "ExpressionUUID" -> \
+"e6c0740d-3f38-49ec-8f5d-d79ed574f6dd"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[26813, 633, 335, 6, 82, "Section", "ExpressionUUID" -> \
+"90f4a509-5bef-4e12-8791-d593f70ea1a7"],
+Cell[27151, 641, 696, 10, 56, "Text", "ExpressionUUID" -> \
+"9089ca51-7797-4f43-902d-71c7116bc195"],
+Cell[27850, 653, 620, 14, 57, "Text", "ExpressionUUID" -> \
+"d5df0146-f745-466a-a989-84579659bf12"],
+Cell[CellGroupData[{
+Cell[28495, 671, 974, 29, 40, "ExerciseEquationNumbered", "ExpressionUUID" -> \
+"22563109-41c6-4746-ac4b-df2f18caa825"],
+Cell[29472, 702, 860, 25, 40, "ExerciseEquationNumbered", "ExpressionUUID" -> \
+"b26f2230-c7a4-4bd5-b552-4e30d0679390"],
+Cell[30335, 729, 863, 26, 40, "ExerciseEquationNumbered", "ExpressionUUID" -> \
+"196a0a2f-04d0-4cde-91a6-fd84680f2542"],
+Cell[31201, 757, 365, 9, 40, "ExerciseEquationNumbered", "ExpressionUUID" -> \
+"b5433fcb-9b55-4aa6-b433-66c952efc02f"]
+}, Open  ]],
+Cell[31581, 769, 974, 22, 85, "Text", "ExpressionUUID" -> \
+"b27aa5da-48f1-436a-9265-966179626960"],
+Cell[CellGroupData[{
+Cell[32580, 795, 1779, 57, 40, "ExerciseEquationNumbered", "ExpressionUUID" \
+-> "bee6c74a-c6e1-45b5-894b-a8710ef05e7d"],
+Cell[34362, 854, 1126, 38, 40, "ExerciseEquationNumbered", "ExpressionUUID" \
+-> "4010ea6c-6335-4e98-94c5-73c37a728213"]
+}, Open  ]],
+Cell[35503, 895, 2938, 71, 241, "Text", "ExpressionUUID" -> \
+"cddfcb3d-cb30-4152-8366-c3ae174d60fb"],
+Cell[38444, 968, 1105, 20, 57, "Text", "ExpressionUUID" -> \
+"159b2740-c83f-4b90-989b-5f8d81ec165c"],
+Cell[39552, 990, 3385, 58, 36, "Text", "ExpressionUUID" -> \
+"989914db-1765-4573-9708-bb93b271bb0b"],
+Cell[42940, 1050, 619, 10, 31, "Text", "ExpressionUUID" -> \
+"50e5e366-1c79-4eed-8f81-7025a982002e"],
+Cell[43562, 1062, 1380, 42, 109, "Text", "ExpressionUUID" -> \
+"aa1f7209-4ab9-498f-bfff-c0055fd93ff0"],
+Cell[44945, 1106, 1086, 21, 68, "Text", "ExpressionUUID" -> \
+"7d4b7ccc-513d-482e-b512-bbe62f00e861"],
+Cell[46034, 1129, 4568, 115, 363, "Text", "ExpressionUUID" -> \
+"41fa8eb2-b684-4c7b-836f-cc491ece2069"],
+Cell[50605, 1246, 924, 18, 44, "Text", "ExpressionUUID" -> \
+"9166a484-7b04-4d6c-a80b-08db1292e2b1"],
+Cell[51532, 1266, 1204, 38, 57, "ExerciseEquationNumbered", "ExpressionUUID" \
+-> "f0fef0aa-5a88-4414-ae11-a37f6eef5937"],
+Cell[52739, 1306, 2013, 65, 117, "Text", "ExpressionUUID" -> \
+"c3aa09ff-94c4-49b0-a700-eaf3a4b72848"],
+Cell[54755, 1373, 496, 11, 61, "Text", "ExpressionUUID" -> \
+"ba279b61-a9ff-4772-863b-627abef9014b"],
+Cell[55254, 1386, 15799, 364, 350, "Text", "ExpressionUUID" -> \
+"52ea49e3-3c14-432a-b2cc-b89e579fa255"],
+Cell[71056, 1752, 787, 19, 82, "Text", "ExpressionUUID" -> \
+"ddc2f352-24e5-4be1-841b-9db9e8ff3389"],
+Cell[71846, 1773, 6072, 157, 506, "Text", "ExpressionUUID" -> \
+"fcfcbc36-6605-400e-aa88-e9ebaf22b2e3"],
+Cell[77921, 1932, 1092, 23, 80, "Text", "ExpressionUUID" -> \
+"2dced691-9028-444e-97ab-8ab5caed1ee5"],
+Cell[79016, 1957, 1762, 56, 118, "Text", "ExpressionUUID" -> \
+"f6780c1a-3a35-4e29-973a-1c53f1f5d76a"],
+Cell[80781, 2015, 1014, 15, 79, "Text", "ExpressionUUID" -> \
+"f5d938b3-d64c-4849-b3b2-854a51790a77"],
+Cell[81798, 2032, 1328, 40, 72, "ExerciseEquationNumbered", "ExpressionUUID" \
+-> "c8535e2a-0501-4bd8-b4d9-6c5f70cb2405"],
+Cell[83129, 2074, 874, 13, 43, "Text", "ExpressionUUID" -> \
+"e26f5e08-944b-4601-a424-bcc879744dcd"],
+Cell[84006, 2089, 2708, 58, 345, "Text", "ExpressionUUID" -> \
+"6dce0777-729f-4f5d-a810-ad96950604ef"],
+Cell[86717, 2149, 1225, 19, 79, "Text", "ExpressionUUID" -> \
+"610e406b-a449-4962-b137-2e3928b8f604"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[87979, 2173, 456, 11, 116, "Section", "ExpressionUUID" -> \
+"9484f1c2-e8fb-465e-b0c5-d635839d7d7f"],
+Cell[88438, 2186, 1029, 18, 43, "Text", "ExpressionUUID" -> \
+"3297255d-6506-4ba0-b175-79eb14ce4718"],
+Cell[89470, 2206, 1112, 19, 43, "Text", "ExpressionUUID" -> \
+"a0c69bfa-6a53-4460-9840-28c177bf5fc8"],
+Cell[CellGroupData[{
+Cell[90607, 2229, 436, 10, 50, "Input", "ExpressionUUID" -> \
+"7b47a000-cadb-45e7-b5e7-c6c6e495c33a"],
+Cell[91046, 2241, 6673, 181, 414, "Print", "ExpressionUUID" -> \
+"e7eda1d5-0d7e-4246-850b-b9c1cdb804ef"],
+Cell[97722, 2424, 3676, 90, 123, "Output", "ExpressionUUID" -> \
+"ac369656-9472-4767-b0e4-af5131375326"]
+}, Open  ]],
+Cell[101413, 2517, 450, 11, 43, "Text", "ExpressionUUID" -> \
+"9d53c0a2-d19c-42e6-81ac-73aaac42a80a"],
+Cell[CellGroupData[{
+Cell[101888, 2532, 393, 8, 50, "Input", "ExpressionUUID" -> \
+"0ff75311-b93c-4691-a266-c5df687651cf"],
+Cell[102284, 2542, 11688, 321, 811, "Print", "ExpressionUUID" -> \
+"958acd7c-bca3-4461-a0c2-6a6f0709823e"],
+Cell[113975, 2865, 7100, 182, 182, "Output", "ExpressionUUID" -> \
+"ce41c214-f612-432e-908e-ba86124557d2"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[121124, 3053, 373, 8, 169, "AppendixSectionNumber", "ExpressionUUID" -> \
+"92ae0b9e-7ebb-4752-b11f-fa46aa022177"],
+Cell[CellGroupData[{
+Cell[121522, 3065, 622, 13, 32, "Reference", "ExpressionUUID" -> \
+"de094b8d-b20d-4c0d-8af0-b3335b849d94"],
+Cell[122147, 3080, 351, 10, 32, "Reference", "ExpressionUUID" -> \
+"f8e5d82a-5700-4a6b-af13-b2a006945988"],
+Cell[122501, 3092, 677, 14, 32, "Reference", "ExpressionUUID" -> \
+"f5f3f972-979b-4561-a294-cf51992bf60d"],
+Cell[123181, 3108, 446, 11, 32, "Reference", "ExpressionUUID" -> \
+"ad7bf3f9-0773-4463-aa51-82d4812b6215"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
